@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino Run</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f0f0;
+            overflow: hidden;
+            touch-action: none; /* Prevent default touch behaviors */
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 80vh; /* Reduced from 100vh */
+            max-width: 1200px; /* Limit maximum width */
+            margin: 20px auto;
+            background: #fff;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        #stats {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        #ground {
+            position: absolute;
+            bottom: 15%; /* Use percentage instead of fixed pixels */
+            width: 100%;
+            height: 2px;
+            background: #000;
+        }
+
+        #dino {
+            position: absolute;
+            bottom: calc(15% + 2px); /* Align with ground */
+            left: 10%;
+            width: 50px;
+            height: 50px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M40,90 v-15 h10 v15 h15 v-25 h10 v-10 h10 v-20 h-10 v-10 h-20 v10 h-10 v10 h-20 v-15 h-10 v25 h10 v35 z" fill="%23228B22"/><circle cx="65" cy="30" r="3" fill="white"/></svg>');
+            transform-origin: bottom;
+        }
+
+        .obstacle {
+            position: absolute;
+            bottom: calc(15% + 2px); /* Align with ground */
+            width: 25px;
+            background: #333;
+        }
+
+        .coin {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23FFD700"/><circle cx="20" cy="20" r="14" fill="%23DAA520"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="20" fill="%23FFD700">$</text></svg>');
+            animation: coinRotate 1s infinite linear;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        @keyframes coinRotate {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .coin-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: gold;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @keyframes particleFly {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        #start-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            z-index: 100;
+            touch-action: manipulation;
+        }
+
+        .heart {
+            display: inline-block;
+            color: red;
+            font-size: 24px;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 768px) {
+            #game-container {
+                height: 70vh; /* Even smaller height on mobile */
+                margin: 10px auto;
+                width: 95%; /* Small margin on sides */
+            }
+
+            #ground {
+                bottom: 20%; /* More space from bottom on mobile */
+            }
+
+            #dino {
+                bottom: calc(20% + 2px);
+                width: 40px;
+                height: 40px;
+            }
+
+            .obstacle {
+                bottom: calc(20% + 2px);
+                width: 20px;
+            }
+        }
+
+        /* Additional media query for very tall screens */
+        @media (max-width: 768px) and (min-height: 1000px) {
+            #game-container {
+                height: 60vh;
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="stats">
+            Time: <span id="time">0</span>s | 
+            Coins: <span id="coins">0</span> | 
+            Lives: <span id="lives"></span>
+        </div>
+        <div id="ground"></div>
+        <div id="dino"></div>
+        <button id="start-btn">Start Game</button>
+    </div>
+
+    <script>
+        const dino = document.getElementById('dino');
+        const gameContainer = document.getElementById('game-container');
+        const startBtn = document.getElementById('start-btn');
+        const timeDisplay = document.getElementById('time');
+        const coinsDisplay = document.getElementById('coins');
+        const livesDisplay = document.getElementById('lives');
+
+        let isJumping = false;
+        let gameStarted = false;
+        let speed = 5;
+        let coins = 0;
+        let lives = 3;
+        let gameTime = 0;
+        let gameTimer;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let lastObstacleType = null; // 'hanging' or 'standing'
+        let obstacleComboCount = 0;
+        const MIN_OBSTACLE_GAP = 300; // Reduced from 500px
+        let obstacleTimer = null;
+        let coinTimer = null;
+
+        function updateLives() {
+            livesDisplay.innerHTML = '♥'.repeat(lives);
+        }
+
+        function jump() {
+            if (!isJumping && gameStarted) {
+                isJumping = true;
+                let position = 0;
+                let velocity = 17;
+                const gravity = 0.7;
+                const groundLevel = window.innerWidth <= 768 ? 
+                    gameContainer.offsetHeight * 0.2 : 
+                    gameContainer.offsetHeight * 0.15;
+                
+                let jumpInterval = setInterval(() => {
+                    position += velocity;
+                    velocity -= gravity;
+                    
+                    const rotation = (velocity > 0) ? -15 : 15;
+                    dino.style.transform = `rotate(${rotation}deg)`;
+
+                    if (position <= 0) {
+                        clearInterval(jumpInterval);
+                        position = 0;
+                        isJumping = false;
+                        dino.style.transform = 'rotate(0deg)';
+                        dino.style.bottom = `calc(${window.innerWidth <= 768 ? '20%' : '15%'} + 2px)`;
+                    } else {
+                        const currentBottom = window.innerWidth <= 768 ? '20%' : '15%';
+                        dino.style.bottom = `calc(${currentBottom} + ${position + 2}px)`;
+                    }
+                }, 16);
+            }
+        }
+
+        function createObstacle() {
+            if (gameStarted) {
+                const obstacle = document.createElement('div');
+                obstacle.classList.add('obstacle');
+                gameContainer.appendChild(obstacle);
+
+                // Get character height
+                const dinoHeight = dino.offsetHeight;
+                
+                // Get all current obstacles
+                const currentObstacles = Array.from(document.getElementsByClassName('obstacle'));
+                
+                // Check spacing from last obstacle
+                const lastObstacle = currentObstacles[currentObstacles.length - 1];
+                if (lastObstacle) {
+                    const lastRect = lastObstacle.getBoundingClientRect();
+                    if (window.innerWidth - lastRect.right < MIN_OBSTACLE_GAP) {
+                        obstacle.remove();
+                        return;
+                    }
+                }
+
+                // Determine if obstacle will be floating or standing
+                let isFloating;
+                if (lastObstacleType === 'hanging') {
+                    isFloating = false; // After hanging, force standing
+                } else if (lastObstacleType === 'standing') {
+                    isFloating = Math.random() > 0.7; // 30% chance for hanging
+                } else {
+                    isFloating = Math.random() > 0.7; // First obstacle
+                }
+
+                // Height variations
+                const minHeight = gameContainer.offsetHeight * 0.15; // Increased minimum height
+                const maxHeight = gameContainer.offsetHeight * 0.3;
+                const height = Math.random() * (maxHeight - minHeight) + minHeight;
+                
+                obstacle.style.height = height + 'px';
+                obstacle.style.left = '100%';
+
+                // Position the obstacle
+                if (isFloating) {
+                    const minFloatHeight = dinoHeight + 30; // Increased clearance
+                    const maxFloatHeight = gameContainer.offsetHeight * 0.3;
+                    const floatHeight = Math.random() * (maxFloatHeight - minFloatHeight) + minFloatHeight;
+                    const currentBottom = window.innerWidth <= 768 ? '20%' : '15%';
+                    obstacle.style.bottom = `calc(${currentBottom} + ${floatHeight}px)`;
+                    lastObstacleType = 'hanging';
+                } else {
+                    obstacle.style.bottom = `calc(${window.innerWidth <= 768 ? '20%' : '15%'} + 2px)`;
+                    lastObstacleType = 'standing';
+                }
+
+                let position = window.innerWidth;
+                const obstacleInterval = setInterval(() => {
+                    if (position < -30) {
+                        clearInterval(obstacleInterval);
+                        obstacle.remove();
+                    }
+                    position -= speed * 2;
+                    obstacle.style.left = position + 'px';
+
+                    const dinoRect = dino.getBoundingClientRect();
+                    const obstacleRect = obstacle.getBoundingClientRect();
+                    if (checkCollision(dinoRect, obstacleRect)) {
+                        lives--;
+                        updateLives();
+                        obstacle.remove();
+                        clearInterval(obstacleInterval);
+                        
+                        if (lives <= 0) {
+                            endGame();
+                        }
+                    }
+                }, 16);
+            }
+        }
+
+        function createCoins() {
+            if (gameStarted && Math.random() > 0.1) { // 90% chance to create coins
+                const coinCount = Math.floor(Math.random() * 4) + 3; // 3-6 coins at a time
+                const coinPattern = Math.random() > 0.3; // 70% chance for patterns
+                
+                // Get all current obstacles for collision checking
+                const obstacles = Array.from(document.getElementsByClassName('obstacle'));
+                
+                for (let i = 0; i < coinCount; i++) {
+                    const coin = document.createElement('div');
+                    coin.classList.add('coin');
+                    
+                    const currentBottom = window.innerWidth <= 768 ? '20%' : '15%';
+                    let coinHeight;
+                    let coinX;
+                    let isValidPosition = false;
+                    let attempts = 0;
+                    const maxAttempts = 5;
+
+                    while (!isValidPosition && attempts < maxAttempts) {
+                        if (coinPattern) {
+                            switch (Math.floor(Math.random() * 5)) {
+                                case 0: // Vertical line
+                                    coinHeight = 40 * i;
+                                    coinX = window.innerWidth + (Math.random() * 30);
+                                    break;
+                                case 1: // Diagonal up
+                                    coinHeight = 30 * i;
+                                    coinX = window.innerWidth + (i * 30);
+                                    break;
+                                case 2: // Diagonal down
+                                    coinHeight = 150 - (30 * i);
+                                    coinX = window.innerWidth + (i * 30);
+                                    break;
+                                case 3: // Sine wave
+                                    coinHeight = Math.sin(i * 0.5) * 50 + 80;
+                                    coinX = window.innerWidth + (i * 40);
+                                    break;
+                                case 4: // Circle/arc
+                                    const angle = (i / coinCount) * Math.PI;
+                                    coinHeight = Math.sin(angle) * 60 + 80;
+                                    coinX = window.innerWidth + Math.cos(angle) * 30 + (i * 30);
+                                    break;
+                            }
+                        } else {
+                            // Random cluster with better spacing
+                            coinHeight = Math.random() * (gameContainer.offsetHeight * 0.25) + 30;
+                            coinX = window.innerWidth + (Math.random() * 150) + (i * 35);
+                        }
+
+                        // Stricter collision checking
+                        isValidPosition = true;
+                        const coinRect = {
+                            left: coinX,
+                            right: coinX + 25,
+                            top: gameContainer.offsetHeight - (gameContainer.offsetHeight * 0.15) - coinHeight,
+                            bottom: gameContainer.offsetHeight - (gameContainer.offsetHeight * 0.15) - coinHeight + 25
+                        };
+
+                        for (const obstacle of obstacles) {
+                            const obstacleRect = obstacle.getBoundingClientRect();
+                            const safetyMarginX = 80; // Increased from 50
+                            const safetyMarginY = 20; // Increased from 10
+
+                            // Stricter collision check
+                            if (!(coinRect.right + safetyMarginX < obstacleRect.left || 
+                                coinRect.left > obstacleRect.right + safetyMarginX || 
+                                coinRect.bottom + safetyMarginY < obstacleRect.top || 
+                                coinRect.top > obstacleRect.bottom + safetyMarginY)) {
+                                isValidPosition = false;
+                                break;
+                            }
+
+                            // Increased minimum distance from obstacles
+                            if (Math.abs(coinRect.left - obstacleRect.right) < 100 || 
+                                Math.abs(coinRect.right - obstacleRect.left) < 100) {
+                                isValidPosition = false;
+                                break;
+                            }
+                        }
+
+                        // Ensure coin is not too high to reach
+                        const maxReachableHeight = gameContainer.offsetHeight * 0.5;
+                        if (coinRect.top < gameContainer.offsetHeight - maxReachableHeight) {
+                            isValidPosition = false;
+                        }
+
+                        attempts++;
+                    }
+
+                    if (isValidPosition) {
+                        gameContainer.appendChild(coin);
+                        coin.style.left = `${coinX}px`;
+                        coin.style.bottom = `calc(${currentBottom} + ${coinHeight}px)`;
+
+                        let coinPosition = coinX;
+                        const coinInterval = setInterval(() => {
+                            if (coinPosition < -20) {
+                                clearInterval(coinInterval);
+                                coin.remove();
+                            }
+                            coinPosition -= speed * 2;
+                            coin.style.left = coinPosition + 'px';
+
+                            const dinoRect = dino.getBoundingClientRect();
+                            const coinRect = coin.getBoundingClientRect();
+                            if (checkCollision(dinoRect, coinRect)) {
+                                coins++;
+                                coinsDisplay.textContent = coins;
+                                clearInterval(coinInterval);
+                                createCoinCollectAnimation(coin, coinRect);
+                            }
+                        }, 16);
+                    }
+                }
+            }
+        }
+
+        function createCoinCollectAnimation(coin, coinRect) {
+            // Create burst effect
+            const particleCount = 8;
+            const centerX = coinRect.left + coinRect.width / 2;
+            const centerY = coinRect.top + coinRect.height / 2;
+
+            // Animate the coin itself
+            coin.style.animation = 'coinCollect 0.3s ease-out forwards';
+
+            // Create particles
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'coin-particle';
+                document.body.appendChild(particle);
+
+                // Calculate particle trajectory
+                const angle = (i / particleCount) * Math.PI * 2;
+                const velocity = 5;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+
+                // Position particle at coin's center
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+
+                // Animate particle
+                let frame = 0;
+                const animateParticle = () => {
+                    frame++;
+                    const x = centerX + vx * frame;
+                    const y = centerY + vy * frame + 0.5 * frame * frame; // Add gravity
+                    
+                    particle.style.left = x + 'px';
+                    particle.style.top = y + 'px';
+                    particle.style.animation = 'particleFly 0.5s ease-out forwards';
+
+                    if (frame < 20) {
+                        requestAnimationFrame(animateParticle);
+                    } else {
+                        particle.remove();
+                    }
+                };
+
+                requestAnimationFrame(animateParticle);
+            }
+
+            // Remove coin after animation
+            setTimeout(() => coin.remove(), 300);
+        }
+
+        function checkCollision(rect1, rect2) {
+            return !(rect1.right < rect2.left || 
+                    rect1.left > rect2.right || 
+                    rect1.bottom < rect2.top || 
+                    rect1.top > rect2.bottom);
+        }
+
+        function startGame() {
+            gameStarted = true;
+            startBtn.style.display = 'none';
+            lives = 3;
+            coins = 0;
+            gameTime = 0;
+            speed = 5;
+            updateLives();
+            coinsDisplay.textContent = '0';
+
+            // Create first obstacle immediately
+            createObstacle();
+
+            // Set up regular obstacle creation with shorter interval
+            obstacleTimer = setInterval(() => {
+                if (gameStarted) {
+                    createObstacle();
+                }
+            }, 1800); // Reduced from 2500ms to 1800ms
+
+            // Create coins regularly
+            coinTimer = setInterval(() => {
+                if (gameStarted) {
+                    createCoins();
+                }
+            }, 1000);
+
+            // Game timer
+            gameTimer = setInterval(() => {
+                gameTime++;
+                timeDisplay.textContent = gameTime;
+                
+                // Gradually increase game speed
+                if (gameTime % 10 === 0 && speed < 12) {
+                    speed += 0.5;
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            gameStarted = false;
+            
+            // Clear all timers
+            clearInterval(gameTimer);
+            clearInterval(obstacleTimer);
+            clearInterval(coinTimer);
+            
+            // Reset game state
+            lastObstacleType = null;
+            obstacleComboCount = 0;
+            speed = 5;
+            
+            // Reset dino position
+            dino.style.bottom = `calc(${window.innerWidth <= 768 ? '20%' : '15%'} + 2px)`;
+            dino.style.transform = 'rotate(0deg)';
+            
+            // Show start button
+            startBtn.style.display = 'block';
+            startBtn.textContent = 'Play Again';
+            
+            // Clear all obstacles and coins
+            Array.from(document.getElementsByClassName('obstacle')).forEach(el => el.remove());
+            Array.from(document.getElementsByClassName('coin')).forEach(el => el.remove());
+            Array.from(document.getElementsByClassName('coin-particle')).forEach(el => el.remove());
+        }
+
+        // Keyboard controls
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'ArrowUp') {
+                jump();
+            } else if (event.code === 'ArrowLeft') {
+                speed = Math.max(3, speed - 1);
+            } else if (event.code === 'ArrowRight') {
+                speed = Math.min(8, speed + 1);
+            }
+        });
+
+        // Touch controls
+        gameContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        gameContainer.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY < -50) {
+                jump(); // Swipe up
+            } else if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX > 50) {
+                    speed = Math.min(8, speed + 1); // Swipe right
+                } else if (deltaX < -50) {
+                    speed = Math.max(3, speed - 1); // Swipe left
+                }
+            }
+        });
+
+        startBtn.addEventListener('click', startGame);
+        updateLives();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Audio Recorder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    
+    .recorder-container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 24px;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #333;
+      margin-top: 0;
+    }
+    
+    .controls {
+      margin: 24px 0;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+    
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    #recordButton {
+      background-color: #ff4444;
+      color: white;
+    }
+    
+    #stopButton {
+      background-color: #4444ff;
+      color: white;
+    }
+    
+    .status {
+      margin-top: 16px;
+      font-size: 16px;
+      color: #666;
+    }
+    
+    .audio-container {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    audio {
+      width: 100%;
+    }
+    
+    .download-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: #4caf50;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    
+    .time-display {
+      font-size: 18px;
+      margin-bottom: 16px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="recorder-container">
+    <h1>Simple Audio Recorder</h1>
+    
+    <div class="time-display" id="timeDisplay">00:00</div>
+    
+    <div class="controls">
+      <button id="recordButton">Start Recording</button>
+      <button id="stopButton" disabled>Stop Recording</button>
+    </div>
+    
+    <div class="status" id="statusText">Ready to record</div>
+    
+    <div class="audio-container" id="audioContainer"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get DOM elements
+      const recordButton = document.getElementById('recordButton');
+      const stopButton = document.getElementById('stopButton');
+      const statusText = document.getElementById('statusText');
+      const audioContainer = document.getElementById('audioContainer');
+      const timeDisplay = document.getElementById('timeDisplay');
+      
+      // Variables for recording
+      let mediaRecorder;
+      let audioChunks = [];
+      let stream;
+      let startTime;
+      let timerInterval;
+      
+      // Check for browser support
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        statusText.textContent = "Your browser doesn't support audio recording";
+        recordButton.disabled = true;
+        return;
+      }
+      
+      // Update timer display
+      function updateTimer() {
+        const now = new Date();
+        const elapsedTime = now - startTime;
+        const seconds = Math.floor(elapsedTime / 1000) % 60;
+        const minutes = Math.floor(elapsedTime / 1000 / 60);
+        
+        timeDisplay.textContent = 
+          String(minutes).padStart(2, '0') + ':' + 
+          String(seconds).padStart(2, '0');
+      }
+      
+      // Record button event
+      recordButton.addEventListener('click', async () => {
+        try {
+          // Get microphone access
+          stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          
+          // Create media recorder
+          mediaRecorder = new MediaRecorder(stream);
+          
+          // Clear previous recordings
+          audioChunks = [];
+          
+          // Clear previous audio elements
+          audioContainer.innerHTML = '';
+          
+          // Set up data handling
+          mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              audioChunks.push(event.data);
+            }
+          };
+          
+          // Start recording
+          mediaRecorder.start();
+          
+          // Start timer
+          startTime = new Date();
+          timerInterval = setInterval(updateTimer, 1000);
+          
+          // Update UI
+          recordButton.disabled = true;
+          stopButton.disabled = false;
+          statusText.textContent = 'Recording...';
+          
+        } catch (error) {
+          console.error('Error accessing microphone:', error);
+          statusText.textContent = 'Error: ' + error.message;
+        }
+      });
+      
+      // Stop button event
+      stopButton.addEventListener('click', () => {
+        if (!mediaRecorder) return;
+        
+        // Stop recording
+        mediaRecorder.stop();
+        
+        // Stop timer
+        clearInterval(timerInterval);
+        
+        // Update UI
+        recordButton.disabled = false;
+        stopButton.disabled = true;
+        statusText.textContent = 'Processing...';
+        
+        // Handle recording completion
+        mediaRecorder.onstop = () => {
+          // Create audio blob
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          
+          // Create audio URL
+          const audioUrl = URL.createObjectURL(audioBlob);
+          
+          // Create audio player
+          const audioElement = document.createElement('audio');
+          audioElement.src = audioUrl;
+          audioElement.controls = true;
+          
+          // Create download link
+          const downloadLink = document.createElement('a');
+          downloadLink.href = audioUrl;
+          downloadLink.download = 'recording_' + new Date().toISOString() + '.webm';
+          downloadLink.textContent = 'Download Recording';
+          downloadLink.className = 'download-link';
+          
+          // Add to container
+          audioContainer.appendChild(audioElement);
+          audioContainer.appendChild(downloadLink);
+          
+          // Stop all tracks
+          if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+          }
+          
+          statusText.textContent = 'Recording complete';
+        };
+      });
+    });
+  </script>
+</body>
+</html>

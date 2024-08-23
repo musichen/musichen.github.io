@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 1px solid #fff;
+        }
+        .game-info {
+            margin-left: 20px;
+        }
+        #startMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400" height="400" tabindex="0"></canvas>
+    <div class="game-info">
+        <p>Points: <span id="points">0</span></p>
+        <p>Time: <span id="time">0</span>s</p>
+        <p>Lives: <span id="lives">3</span></p>
+    </div>
+    <div id="startMessage">Press Spacebar to Start</div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const pointsDisplay = document.getElementById('points');
+        const timeDisplay = document.getElementById('time');
+        const livesDisplay = document.getElementById('lives');
+        const startMessage = document.getElementById('startMessage');
+
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+
+        let snake = [{ x: 10, y: 10 }];
+        let direction = { x: 1, y: 0 };
+        let food = { x: 5, y: 5 };
+        let points = 0;
+        let lives = 3;
+        let startTime;
+        let gameOver = false;
+        let gameStarted = false;
+        let lastTime = 0;
+        const frameInterval = 100; // milliseconds per frame
+
+        function draw(timestamp) {
+            if (!gameStarted || gameOver) return;
+
+            if (timestamp - lastTime > frameInterval) {
+                lastTime = timestamp;
+
+                // Clear the canvas
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw the snake
+                ctx.fillStyle = '#0f0';
+                snake.forEach(segment => ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize));
+
+                // Draw the food
+                ctx.fillStyle = '#f00';
+                ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+
+                // Move the snake
+                const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+
+                // Check for collision with walls or itself
+                if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount || snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)) {
+                    lives--;
+                    livesDisplay.textContent = lives;
+                    if (lives === 0) {
+                        endGame();
+                        return;
+                    } else {
+                        resetSnake();
+                        draw();
+                        return;
+                    }
+                }
+
+                snake.unshift(head);
+
+                // Check if the snake eats the food
+                if (head.x === food.x && head.y === food.y) {
+                    points++;
+                    pointsDisplay.textContent = points;
+                    placeFood();
+                } else {
+                    snake.pop();
+                }
+
+                // Update the game time
+                const currentTime = Math.floor((Date.now() - startTime) / 1000);
+                timeDisplay.textContent = currentTime;
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        function placeFood() {
+            food = {
+                x: Math.floor(Math.random() * tileCount),
+                y: Math.floor(Math.random() * tileCount)
+            };
+            // Ensure the food doesn't spawn on the snake
+            while (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+                food = {
+                    x: Math.floor(Math.random() * tileCount),
+                    y: Math.floor(Math.random() * tileCount)
+                };
+            }
+        }
+
+        function resetSnake() {
+            snake = [{ x: 10, y: 10 }];
+            direction = { x: 1, y: 0 };
+            startTime = Date.now();
+        }
+
+        function endGame() {
+            gameOver = true;
+            const finalTime = Math.floor((Date.now() - startTime) / 1000);
+            alert(`Game Over!\nPoints: ${points}\nTime: ${finalTime}s`);
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === ' ' && !gameStarted) {
+                gameStarted = true;
+                startMessage.style.display = 'none';
+                startTime = Date.now();
+                draw();
+                canvas.focus();
+            }
+
+            if (gameStarted && !gameOver) {
+                switch (event.key) {
+                    case 'ArrowUp':
+                    case 'w':
+                        if (direction.y !== 1) direction = { x: 0, y: -1 };
+                        break;
+                    case 'ArrowDown':
+                    case 's':
+                        if (direction.y !== -1) direction = { x: 0, y: 1 };
+                        break;
+                    case 'ArrowLeft':
+                    case 'a':
+                        if (direction.x !== 1) direction = { x: -1, y: 0 };
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                        if (direction.x !== -1) direction = { x: 1, y: 0 };
+                        break;
+                }
+            }
+        });
+
+        placeFood();
+    </script>
+</body>
+</html>

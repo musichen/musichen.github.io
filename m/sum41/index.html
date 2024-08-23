@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <title>Sum41 JS Player</title>
+  <link rel="icon" href="images/default-cover.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+    <div class="noise"></div>
+  </div>
+
+  <main class="layout">
+    <section class="player card" aria-label="Audio player">
+      <div class="player-top">
+        <span class="eyebrow">JS Player / Sum41</span>
+        <button id="modeButton" class="ghost-button" type="button" aria-label="Change playback mode">Loop all</button>
+      </div>
+
+      <div class="cover-shell">
+        <img id="coverImage" src="images/default-cover.svg" alt="Current track cover" draggable="false">
+      </div>
+
+      <div class="track-meta">
+        <p class="label">Now playing</p>
+        <h1 id="trackTitle">Loading…</h1>
+        <p id="trackArtist">Preparing playlist</p>
+        <div class="track-actions">
+          <button id="lyricsButton" class="ghost-button icon-ghost" type="button" aria-label="Show lyrics" title="Show lyrics" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v13H8a3 3 0 0 0-3 3V5.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M8 8h7M8 11h7M8 14h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="seek-block">
+        <input id="seekBar" class="range" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek track">
+        <div class="time-row" aria-live="off">
+          <span id="currentTime">0:00</span>
+          <span id="totalTime">0:00</span>
+        </div>
+      </div>
+
+      <div class="main-controls">
+        <button id="prevButton" class="icon-button" type="button" aria-label="Previous track">⏮</button>
+        <button id="playButton" class="play-button" type="button" aria-label="Play">▶</button>
+        <button id="nextButton" class="icon-button" type="button" aria-label="Next track">⏭</button>
+      </div>
+
+      <div class="sub-controls">
+        <label class="volume" for="volumeBar">
+          <span>Volume</span>
+          <input id="volumeBar" class="range" type="range" min="0" max="1" step="0.01" value="0.9" aria-label="Volume">
+        </label>
+        <button id="playlistToggle" class="ghost-button mobile-only" type="button" aria-expanded="true" aria-controls="playlistCard">Playlist</button>
+      </div>
+
+      <section id="lyricsPanel" class="lyrics-panel" hidden aria-label="Lyrics panel">
+        <div class="lyrics-header">
+          <h3 id="lyricsTitle">Lyrics</h3>
+          <button id="lyricsClose" class="icon-button small-icon-button" type="button" aria-label="Close lyrics">✕</button>
+        </div>
+        <div id="lyricsContent" class="lyrics-content">Lyrics not loaded.</div>
+      </section>
+
+      <p id="statusText" class="status" aria-live="polite">Loading songs…</p>
+    </section>
+
+    <aside id="playlistCard" class="playlist card" aria-label="Playlist">
+      <div class="playlist-top">
+        <div>
+          <p class="label">Songs folder</p>
+          <h2>Playlist</h2>
+        </div>
+        <span id="trackCount" class="count-pill">0 tracks</span>
+      </div>
+
+      <label class="search-wrap" for="searchInput">
+        <span class="search-label">Search songs</span>
+        <input id="searchInput" class="search-input" type="search" placeholder="Search by song or artist">
+      </label>
+
+      <ul id="playlist" class="playlist-list"></ul>
+      <p class="playlist-help">Cover art rule: <code>songs/name.mp3</code> uses <code>images/name.jpg</code>. Optional lyrics: <code>lyrics/name.md</code>.</p>
+    </aside>
+  </main>
+
+  <audio id="audio" preload="metadata" playsinline></audio>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

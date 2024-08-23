@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Default music cover</title>
+  <desc id="desc">Fallback album cover used when no matching jpg exists.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#121a33"/>
+    </linearGradient>
+    <linearGradient id="disc" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ff4d6d"/>
+      <stop offset="100%" stop-color="#6aa4ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" rx="120" fill="url(#bg)"/>
+  <circle cx="600" cy="600" r="320" fill="url(#disc)" opacity="0.95"/>
+  <circle cx="600" cy="600" r="185" fill="#0b1020" opacity="0.85"/>
+  <circle cx="600" cy="600" r="52" fill="#f8fafc"/>
+  <text x="600" y="980" fill="#f8fafc" font-size="78" font-family="Arial, sans-serif" text-anchor="middle">Drop a matching JPG cover into /images</text>
+</svg>

@@ -1,0 +1,30 @@
+[
+  {
+    "file": "By_Myslf.mp3",
+    "title": "By Myslf",
+    "artist": "Linkin",
+    "cover-image": "images/linkin.jpg",
+    "lyrics": null
+  },
+  {
+    "file": "Crawling.mp3",
+    "title": "Crawling",
+    "artist": "Linkin",
+    "cover-image": "images/linkin.jpg",
+    "lyrics": null
+  },
+  {
+    "file": "Krwlng.mp3",
+    "title": "Krwlng",
+    "artist": "Linkin",
+    "cover-image": "images/linkin.jpg",
+    "lyrics": null
+  },
+  {
+    "file": "With You.mp3",
+    "title": "With You",
+    "artist": "Linkin",
+    "cover-image": "images/linkin.jpg",
+    "lyrics": null
+  }
+]

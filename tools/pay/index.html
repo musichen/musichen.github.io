@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bank Connections - QR Codes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+
+        .info-text {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            color: #2d3748;
+            font-size: 0.9em;
+        }
+
+        .banks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .bank-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .bank-card:nth-child(1) { animation-delay: 0.1s; }
+        .bank-card:nth-child(2) { animation-delay: 0.2s; }
+        .bank-card:nth-child(3) { animation-delay: 0.3s; }
+        .bank-card:nth-child(4) { animation-delay: 0.4s; }
+        .bank-card:nth-child(5) { animation-delay: 0.5s; }
+
+        .bank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bank-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            position: relative;
+        }
+
+        .bank-logo {
+            width: 120px;
+            height: 40px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: transparent;
+        }
+
+        .bank-name {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2d3748;
+            flex-grow: 1;
+        }
+
+        .copy-all-btn {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-all-btn:hover {
+            background: #edf2f7;
+            transform: translateY(-1px);
+        }
+
+        .bank-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            position: relative;
+        }
+
+        .detail-label {
+            font-size: 0.8em;
+            color: #718096;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-value {
+            font-size: 1em;
+            color: #2d3748;
+            font-weight: 500;
+            font-family: 'Monaco', 'Menlo', monospace;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.85em;
+        }
+
+        .copy-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .qr-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .qr-divider {
+            height: 2px;
+            background: #e2e8f0;
+            margin: 25px auto;
+            width: 80%;
+            max-width: 200px;
+        }
+
+        .qr-label {
+            font-size: 0.9em;
+            color: #718096;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .qr-code {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        .qr-code canvas {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .generator-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .generator-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .generator-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2d3748;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .revolut-link {
+            color: #4299e1;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .revolut-link:hover {
+            color: #2b6cb0;
+            text-decoration: underline;
+        }
+
+        .qr-section img.qr-code {
+            max-width: 200px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            display: block;
+        }
+
+        .revolut-qr {
+            max-width: 200px;
+            padding: 0;
+        }
+
+        @media (max-width: 480px) {
+            .qr-section img.qr-code {
+                max-width: 150px;
+            }
+
+            .revolut-qr {
+                max-width: 150px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .bank-header {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .bank-logo {
+                width: 100px;
+                height: 35px;
+            }
+
+            .copy-all-btn {
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏦 My Bank Connections</h1>
+            <p>Quick access QR pay  to my bank accs </p>
+        </div>
+
+        <div class="info-text">
+            <strong>📱 Ready to use:</strong> All QR codes are pre-generated and ready to be scanned by any banking app for instant SEPA payments. Simply download or share the QR code for the account you want to receive payments to.
+        </div>
+
+        <div class="banks-list">
+            <!-- BAWAG P.S.K. EasyBank -->
+            <div class="bank-card">
+                <div class="bank-header">
+                    <img src="banks_logos/easybank_logo.png" alt="BAWAG P.S.K. Logo" class="bank-logo">
+                    <div class="bank-name">BAWAG P.S.K. (EasyBank)</div>
+                    <button class="copy-all-btn" onclick="copyAllBankInfo(this)">
+                        📋 Copy All Details
+                    </button>
+                </div>
+                
+                <div class="bank-details">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Account Holder
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'Oleksandr Muzychenko')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">Oleksandr Muzychenko</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            IBAN
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'AT61 1420 0200 1275 7833')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">AT61 1420 0200 1275 7833</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            BIC/SWIFT
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'BAWAATWWXXX')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">BAWAATWWXXX</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Bank Name
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'BAWAG P.S.K. Bank für Arbeit und Wirtschaft und Österreichische Postsparkasse Aktiengesellschaft')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">BAWAG P.S.K. Bank für Arbeit und Wirtschaft und Österreichische Postsparkasse Aktiengesellschaft</div>
+                    </div>
+                </div>
+
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <div id="qr-bawag"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bank Austria -->
+            <div class="bank-card">
+                <div class="bank-header">
+                    <img src="banks_logos/bankaustria_logo.png" alt="Bank Austria Logo" class="bank-logo">
+                    <div class="bank-name">Bank Austria</div>
+                    <button class="copy-all-btn" onclick="copyAllBankInfo(this)">
+                        📋 Copy All Details
+                    </button>
+                </div>
+                
+                <div class="bank-details">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Account Holder
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'Oleksandr Muzychenko')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">Oleksandr Muzychenko</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            IBAN
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'AT67 1200 0100 3959 3057')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">AT67 1200 0100 3959 3057</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            BIC/SWIFT
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'BKAUATWWXXX')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">BKAUATWWXXX</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Bank Address
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'Rothschildplatz 1, 1020 Wien')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">Rothschildplatz 1, 1020 Wien</div>
+                    </div>
+                </div>
+
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <div id="qr-bankaustria"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bank99 -->
+            <div class="bank-card">
+                <div class="bank-header">
+                    <img src="banks_logos/bank99_logo.png" alt="Bank99 Logo" class="bank-logo">
+                    <div class="bank-name">Bank99</div>
+                    <button class="copy-all-btn" onclick="copyAllBankInfo(this)">
+                        📋 Copy All Details
+                    </button>
+                </div>
+                
+                <div class="bank-details">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Account Holder
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'Oleksandr Muzychenko')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">Oleksandr Muzychenko</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            IBAN
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'AT37 1921 0806 0197 3680')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">AT37 1921 0806 0197 3680</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            BIC/SWIFT
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'SPBAATWWB99')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">SPBAATWWB99</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Bank Address
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'Praterstraße 31, 1020 Wien')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">Praterstraße 31, 1020 Wien</div>
+                    </div>
+                </div>
+
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <div id="qr-bank99"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revolut -->
+            <div class="bank-card">
+                <div class="bank-header">
+                    <img src="banks_logos/revolutbank_logo.png" alt="Revolut Logo" class="bank-logo">
+                    <div class="bank-name">REVOLUT PAYMENTS UAB</div>
+                    <button class="copy-all-btn" onclick="copyAllBankInfo(this)">
+                        📋 Copy All Details
+                    </button>
+                </div>
+                <div class="bank-details">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            IBAN
+                            <button class="copy-btn" onclick="copyToClipboard(this.parentElement.nextElementSibling.textContent)">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">LT26 3250 0224 1644 3133</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            BIC/SWIFT
+                            <button class="copy-btn" onclick="copyToClipboard(this.parentElement.nextElementSibling.textContent)">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">REVOLT21</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Revtag
+                            <button class="copy-btn" onclick="copyToClipboard(this.parentElement.nextElementSibling.textContent)">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">@oleksawmi</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Quick Pay Link
+                            <button class="copy-btn" onclick="copyToClipboard('https://revolut.me/oleksawmi')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">
+                            <a href="https://revolut.me/oleksawmi" target="_blank" rel="noopener noreferrer" class="revolut-link">revolut.me/oleksawmi</a>
+                        </div>
+                    </div>
+                    <div class="qr-section">
+                        <div class="qr-code">
+                            <div id="qr-revolut"></div>
+                        </div>
+                        <div class="qr-divider"></div>
+                        <div class="qr-label">Revolut-generated in-App QR code to pay</div>
+                        <img src="banks_qrs/revolut_qr.png" alt="Revolut QR Code" class="qr-code revolut-qr">
+                    </div>
+                </div>
+            </div>
+
+            <!-- N26 Business -->
+            <div class="bank-card">
+                <div class="bank-header">
+                    <img src="banks_logos/n26_logo.png" alt="N26 Logo" class="bank-logo">
+                    <div class="bank-name">N26 Business</div>
+                    <button class="copy-all-btn" onclick="copyAllBankInfo(this)">
+                        📋 Copy All Details
+                    </button>
+                </div>
+                
+                <div class="bank-details">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Account Holder
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'OLEKSANDR MUZYCHENKO')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">OLEKSANDR MUZYCHENKO</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            IBAN
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'DE03 1001 1001 2782 5132 42')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">DE03 1001 1001 2782 5132 42</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            BIC/SWIFT
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'NTSBDEB1XXX')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">NTSBDEB1XXX</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            Bank Address
+                            <button class="copy-btn" onclick="copyToClipboard(this, 'Klosterstraße 62, 10179 Berlin')">📋 Copy</button>
+                        </div>
+                        <div class="detail-value">Klosterstraße 62, 10179 Berlin</div>
+                    </div>
+                </div>
+
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <div id="qr-n26"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="generator-link">
+            <a href="../payqrgen/index.html" class="generator-btn">
+                🔄 Generate New QR Code
+            </a>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script>
+        let qrCodeData = {
+            'qr-bawag': null,
+            'qr-bankaustria': null,
+            'qr-bank99': null,
+            'qr-revolut': null,
+            'qr-n26': null
+        };
+
+        function showToast(message = 'Copied to clipboard!') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        async function copyToClipboard(button, text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast();
+                
+                // Visual feedback
+                const originalText = button.textContent;
+                button.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 1000);
+            } catch (err) {
+                showToast('Failed to copy. Please try again.');
+            }
+        }
+
+        function copyAllBankInfo(button) {
+            const bankCard = button.closest('.bank-card');
+            const details = bankCard.querySelectorAll('.detail-value');
+            const allInfo = Array.from(details).map(detail => detail.textContent.trim()).join('\n');
+            
+            copyToClipboard(button, allInfo);
+            
+            // Visual feedback
+            const originalText = button.textContent;
+            button.textContent = '✓ All Details Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 1000);
+        }
+
+        function generateEPCQRCode(data) {
+            const lines = [
+                'BCD',                    // Service Tag
+                '002',                    // Version
+                '1',                      // Character set (UTF-8)
+                'SCT',                    // Identification
+                '',                       // BIC (optional, empty for domestic)
+                data.recipientName,       // Beneficiary Name
+                data.iban,               // Beneficiary Account (IBAN)
+                '',                       // Amount (empty for flexible amount)
+                '',                       // Purpose (optional)
+                '',                       // Reference (empty)
+                ''                        // Info (empty)
+            ];
+            
+            return lines.join('\n');
+        }
+
+        function generateQRCode(elementId, data) {
+            const qrData = generateEPCQRCode(data);
+            const qrContainer = document.getElementById(elementId);
+            qrContainer.innerHTML = '';
+
+            try {
+                const qr = qrcode(0, 'M');
+                qr.addData(qrData);
+                qr.make();
+
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const size = 150;
+                const moduleCount = qr.getModuleCount();
+                const cellSize = size / moduleCount;
+                
+                canvas.width = size;
+                canvas.height = size;
+
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, size, size);
+                
+                ctx.fillStyle = '#2D3748';
+                for (let row = 0; row < moduleCount; row++) {
+                    for (let col = 0; col < moduleCount; col++) {
+                        if (qr.isDark(row, col)) {
+                            ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                        }
+                    }
+                }
+
+                qrContainer.appendChild(canvas);
+            } catch (error) {
+                console.error('QR Code generation error:', error);
+                qrContainer.innerHTML = '<div style="color: red; font-size: 0.8em;">Error generating QR code</div>';
+            }
+        }
+
+        // Generate all QR codes when page loads
+        window.addEventListener('load', function() {
+            if (typeof qrcode !== 'undefined') {
+                const banks = [
+                    {
+                        elementId: 'qr-bawag',
+                        data: {
+                            recipientName: 'Oleksandr Muzychenko',
+                            iban: 'AT611420020012757833'
+                        }
+                    },
+                    {
+                        elementId: 'qr-bankaustria',
+                        data: {
+                            recipientName: 'Oleksandr Muzychenko',
+                            iban: 'AT671200010039593057'
+                        }
+                    },
+                    {
+                        elementId: 'qr-bank99',
+                        data: {
+                            recipientName: 'Oleksandr Muzychenko',
+                            iban: 'AT371921080601973680'
+                        }
+                    },
+                    {
+                        elementId: 'qr-revolut',
+                        data: {
+                            recipientName: 'Oleksandr Muzychenko',
+                            iban: 'LT263250022416443133'
+                        }
+                    },
+                    {
+                        elementId: 'qr-n26',
+                        data: {
+                            recipientName: 'OLEKSANDR MUZYCHENKO',
+                            iban: 'DE031001100127825132442'
+                        }
+                    }
+                ];
+
+                banks.forEach(bank => {
+                    generateQRCode(bank.elementId, bank.data);
+                });
+            } else {
+                console.warn('QR Code library not loaded properly');
+            }
+        });
+    </script>
+</body>
+</html> 

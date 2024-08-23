@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Do Nothing for 1 Minute</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            background: black;
+            touch-action: none;
+        }
+
+        #background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            object-fit: cover;
+            -webkit-playsinline: playsinline;
+            playsinline: playsinline;
+        }
+
+        .fallback-bg {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -3;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('./image.png') no-repeat center center;
+            background-size: cover;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        #message {
+            font-size: clamp(1rem, 4vw, 2rem);
+            margin-bottom: clamp(1rem, 4vh, 2rem);
+            max-width: min(800px, 90vw);
+            line-height: 1.5;
+            padding: 0 20px;
+            transition: opacity 1s linear;
+        }
+
+        #timer {
+            font-size: clamp(2rem, 8vw, 6rem);
+            font-weight: bold;
+            transition: opacity 1s linear;
+        }
+
+        .fail-message {
+            color: #ff4444;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        #audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+            z-index: 100;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #fullscreen-control {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #fullscreen-control:hover,
+        #audio-control:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .audio-icon,
+        .fullscreen-icon {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        #youtube-fallback {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            border: 0;
+        }
+
+        @media (max-width: 410px) and (max-height: 502px) {
+            #message {
+                font-size: 0.8rem;
+            }
+            #timer {
+                font-size: 2rem;
+            }
+            #audio-control,
+            #fullscreen-control {
+                width: 40px;
+                height: 40px;
+            }
+            .audio-icon,
+            .fullscreen-icon {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="fallback-bg"></div>
+    <video id="background-video" autoplay muted loop playsinline>
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
+    
+    <audio id="background-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="message">
+        Do nothing for 1 minute.<br>
+        Don't move your mouse, don't touch screen, don't touch keyboard, don't leave this page, do nothing, relax, stop the time inside of you for 1 minute<br>
+        recharge
+    </div>
+    <div id="timer">01:00</div>
+
+    <button id="fullscreen-control" aria-label="Toggle fullscreen">
+        <svg class="fullscreen-icon" viewBox="0 0 24 24">
+            <path d="M7,14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12,7h-3v2h5v-5h-2v3zM14,5v2h3v3h2V5h-5z"/>
+        </svg>
+    </button>
+
+    <button id="audio-control" aria-label="Toggle music">
+        <svg class="audio-icon" viewBox="0 0 24 24">
+            <path d="M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.5,12.43 16.5,12.21 16.5,12Z"/>
+        </svg>
+    </button>
+
+    <script>
+        let timeLeft = 60;
+        let timerId = null;
+        let failed = false;
+        const backgroundMusic = document.getElementById('background-music');
+        const audioControl = document.getElementById('audio-control');
+        const audioIcon = audioControl.querySelector('svg');
+        const fullscreenControl = document.getElementById('fullscreen-control');
+        let isMusicPlaying = true;
+        let lastTouchTarget = null;
+
+        // Video setup and fallback handling
+        const video = document.getElementById('background-video');
+        
+        function setupVideo() {
+            video.load();
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Video autoplay failed:", error);
+                    video.style.display = 'none';
+                });
+            }
+        }
+
+        setupVideo();
+
+        video.addEventListener('error', () => {
+            console.log("Video error occurred");
+            video.style.display = 'none';
+            
+            // Try YouTube fallback
+            const iframe = document.createElement('iframe');
+            iframe.id = 'youtube-fallback';
+            iframe.src = 'https://www.youtube.com/embed/1AZMCr5s3dA?si=M1IwNDnDUPJSVwHS&controls=0&autoplay=1&loop=1&playlist=1AZMCr5s3dA&mute=1&playsinline=1';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+            document.body.insertBefore(iframe, video);
+        });
+
+        // Fullscreen functionality
+        fullscreenControl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFullscreen();
+        });
+
+        fullscreenControl.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleFullscreen();
+        });
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Audio control
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                audioIcon.innerHTML = '<path d="M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.5,12.43 16.5,12.21 16.5,12Z"/>';
+            } else {
+                backgroundMusic.play();
+                audioIcon.innerHTML = '<path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // Audio control event handlers
+        audioControl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMusic();
+        });
+
+        audioControl.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+            lastTouchTarget = e.target;
+        }, { passive: true });
+
+        audioControl.addEventListener('touchend', (e) => {
+            e.stopPropagation();
+            if (e.target === lastTouchTarget) {
+                toggleMusic();
+            }
+        }, { passive: true });
+
+        // Timer functions
+        function startTimer() {
+            if (timerId) clearInterval(timerId);
+            timeLeft = 60;
+            failed = false;
+            updateDisplay();
+            timerId = setInterval(updateTimer, 1000);
+            
+            if (isMusicPlaying) {
+                backgroundMusic.play().catch(error => {
+                    console.log("Audio autoplay failed:", error);
+                });
+            }
+        }
+
+        function updateTimer() {
+            if (failed) return;
+            
+            timeLeft--;
+            updateDisplay();
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerId);
+                document.getElementById('message').textContent = "Well done! You've successfully done nothing for a minute!";
+            }
+        }
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Add fade effect
+            const opacity = Math.max(0.1, timeLeft / 60);
+            document.getElementById('message').style.opacity = opacity;
+            document.getElementById('timer').style.opacity = opacity;
+        }
+
+        function fail() {
+            if (timeLeft <= 0 || failed) return;
+            
+            failed = true;
+            clearInterval(timerId);
+            document.getElementById('message').innerHTML = '<span class="fail-message">FAIL, you did something<br>let\'s try again</span>';
+            
+            setTimeout(() => {
+                document.getElementById('message').innerHTML = 
+                    'Do nothing for 1 minute.<br>' +
+                    'Don\'t move your mouse, don\'t touch screen, don\'t touch keyboard, don\'t leave this page, do nothing, relax, stop the time inside of you for 1 minute<br>' +
+                    'recharge';
+                startTimer();
+            }, 2000);
+        }
+
+        // Touch event handlers
+        function handleTouch(e) {
+            if (!audioControl.contains(e.target) && !fullscreenControl.contains(e.target)) {
+                fail();
+            }
+        }
+
+        // Event listeners for failure conditions
+        document.addEventListener('mousemove', (e) => {
+            if (!audioControl.contains(e.target) && !fullscreenControl.contains(e.target)) {
+                fail();
+            }
+        });
+        document.addEventListener('keydown', fail);
+        document.addEventListener('touchstart', handleTouch, { passive: true });
+        document.addEventListener('touchmove', handleTouch, { passive: true });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) fail();
+        });
+
+        // Prevent default touch behaviors
+        document.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+
+        // Start timer immediately when page loads
+        window.onload = startTimer;
+    </script>
+</body>
+</html>

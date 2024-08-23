@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "linkin",
+    "title": "Linkin",
+    "artist": "Linkin",
+    "page": "linkin/",
+    "tracks": 4
+  },
+  {
+    "slug": "sum41",
+    "title": "Sum41",
+    "artist": "Sum41",
+    "page": "sum41/",
+    "tracks": 15
+  }
+]

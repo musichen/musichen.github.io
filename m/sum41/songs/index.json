@@ -1,0 +1,107 @@
+[
+  {
+    "file": "Best Of Me.mp3",
+    "title": "Best Of Me",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Best Of Me.md"
+  },
+  {
+    "file": "Fat Lip.mp3",
+    "title": "Fat Lip",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Fat Lip.md"
+  },
+  {
+    "file": "Handle This.mp3",
+    "title": "Handle This",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Handle This.md"
+  },
+  {
+    "file": "Heart Attack.mp3",
+    "title": "Heart Attack",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Heart Attack.md"
+  },
+  {
+    "file": "In Too Deep.mp3",
+    "title": "In Too Deep",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/In Too Deep.md"
+  },
+  {
+    "file": "Makes No Difference.mp3",
+    "title": "Makes No Difference",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Makes No Difference.md"
+  },
+  {
+    "file": "Motivation.mp3",
+    "title": "Motivation",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Motivation.md"
+  },
+  {
+    "file": "Pull The Curtain.mp3",
+    "title": "Pull The Curtain",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Pull The Curtain.md"
+  },
+  {
+    "file": "Rhythms.mp3",
+    "title": "Rhythms",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": null
+  },
+  {
+    "file": "Speak Of The Devil.mp3",
+    "title": "Speak Of The Devil",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Speak Of The Devil.md"
+  },
+  {
+    "file": "sum41.mp3",
+    "title": "Voicemail From Deryck To Alex",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": null
+  },
+  {
+    "file": "Summer.mp3",
+    "title": "Summer",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Summer.md"
+  },
+  {
+    "file": "Walking Disaster.mp3",
+    "title": "Walking Disaster",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/Walking Disaster.md"
+  },
+  {
+    "file": "What I Believe.mp3",
+    "title": "What I Believe",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/What I Believe.md"
+  },
+  {
+    "file": "With Me.mp3",
+    "title": "With Me",
+    "artist": "Sum41",
+    "cover-image": "images/sum41.jpg",
+    "lyrics": "lyrics/With Me.md"
+  }
+]

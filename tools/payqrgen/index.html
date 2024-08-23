@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Payment QR Code Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.95em;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input:hover, textarea:hover {
+            border-color: #cbd5e0;
+        }
+
+        .currency-input {
+            position: relative;
+        }
+
+        .currency-input::before {
+            content: '€';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            color: #667eea;
+            z-index: 1;
+        }
+
+        .currency-input input {
+            padding-left: 35px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            animation: fadeInUp 0.6s ease-out 0.7s both;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .example-btn {
+            width: 100%;
+            padding: 12px;
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            animation: fadeInUp 0.6s ease-out 0.8s both;
+        }
+
+        .example-btn:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateY(-1px);
+        }
+
+        .example-btn:active {
+            transform: translateY(0);
+        }
+
+        .qr-result {
+            margin-top: 30px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .qr-result.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .qr-code {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .download-btn, .share-btn {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .share-btn {
+            background: linear-gradient(45deg, #ed8936, #dd6b20);
+        }
+
+        .download-btn:hover, .share-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .download-btn:hover {
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        .share-btn:hover {
+            box-shadow: 0 5px 15px rgba(237, 137, 54, 0.3);
+        }
+
+        .info-text {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #2d3748;
+            font-size: 0.9em;
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+
+        /* Validation error styles */
+        .form-group.error input,
+        .form-group.error textarea {
+            border-color: #e53e3e;
+            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.8em;
+            margin-top: 5px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            input, textarea {
+                padding: 12px;
+            }
+
+            .generate-btn {
+                padding: 15px;
+            }
+
+            .example-btn {
+                padding: 10px;
+                font-size: 0.85em;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .download-btn, .share-btn {
+                min-width: auto;
+                padding: 12px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💳 Bank Payment QR Generator</h1>
+            <p>Create SEPA-compatible QR codes for easy payments</p>
+        </div>
+
+        <div class="info-text">
+            <strong>📱 How it works:</strong> Fill in the payment details below and generate a QR code that can be scanned by any banking app in Austria and Europe for instant SEPA payments.
+        </div>
+
+        <form id="paymentForm">
+            <div class="form-group">
+                <label for="recipientName">Recipient Name <span class="required">*</span></label>
+                <input type="text" id="recipientName" name="recipientName" required maxlength="35" placeholder="Enter recipient's full name">
+                <div class="error-message" id="recipientNameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="iban">IBAN <span class="required">*</span></label>
+                <input type="text" id="iban" name="iban" required placeholder="AT611904300234573201" maxlength="34">
+                <div class="error-message" id="ibanError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="amount">Amount (EUR)</label>
+                <div class="currency-input">
+                    <input type="number" id="amount" name="amount" step="0.01" min="0" max="999999999.99" placeholder="0.00">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reference">Payment Reference</label>
+                <input type="text" id="reference" name="reference" maxlength="35" placeholder="Invoice number, order ID, etc.">
+                <div class="error-message" id="referenceError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="remittanceInfo">Payment Description</label>
+                <textarea id="remittanceInfo" name="remittanceInfo" maxlength="140" rows="3" placeholder="Additional payment information (max 140 characters)"></textarea>
+                <div class="error-message" id="remittanceInfoError"></div>
+            </div>
+
+            <button type="submit" class="generate-btn">
+                🔄 Generate QR Code
+            </button>
+            
+            <button type="button" class="example-btn" onclick="generateExample()">
+                ✨ Generate Example
+            </button>
+        </form>
+
+        <div id="qrResult" class="qr-result">
+            <h3>Your Payment QR Code</h3>
+            <div id="qrcode" class="qr-code"></div>
+            <div class="action-buttons">
+                <button onclick="downloadQR()" class="download-btn">💾 Download PNG</button>
+                <button onclick="downloadSVG()" class="download-btn">📄 Download SVG</button>
+                <button onclick="shareQR()" class="share-btn">📤 Share QR Code</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script>
+        let currentQRCode = null;
+        let currentSVG = null;
+        let qrCodeLib = null;
+
+        // Initialize QR code library
+        function initQRCode() {
+            if (typeof qrcode !== 'undefined') {
+                qrCodeLib = qrcode;
+                return true;
+            }
+            return false;
+        }
+
+        function formatIBAN(iban) {
+            return iban.replace(/\s/g, '').toUpperCase();
+        }
+
+        // IBAN country code lengths according to EU standards
+        const IBAN_LENGTHS = {
+            'AD': 24, 'AE': 23, 'AL': 28, 'AT': 20, 'AZ': 28, 'BA': 20, 'BE': 16, 'BG': 22, 'BH': 22, 'BR': 29,
+            'BY': 28, 'CH': 21, 'CR': 22, 'CY': 28, 'CZ': 24, 'DE': 22, 'DK': 18, 'DO': 28, 'EE': 20, 'EG': 29,
+            'ES': 24, 'FI': 18, 'FO': 18, 'FR': 27, 'GB': 22, 'GE': 22, 'GI': 23, 'GL': 18, 'GR': 27, 'GT': 28,
+            'HR': 21, 'HU': 28, 'IE': 22, 'IL': 23, 'IS': 26, 'IT': 27, 'JO': 30, 'KW': 30, 'KZ': 20, 'LB': 28,
+            'LC': 32, 'LI': 21, 'LT': 20, 'LU': 20, 'LV': 21, 'MC': 27, 'MD': 24, 'ME': 22, 'MK': 19, 'MR': 27,
+            'MT': 31, 'MU': 30, 'NL': 18, 'NO': 15, 'PK': 24, 'PL': 28, 'PS': 29, 'PT': 25, 'QA': 29, 'RO': 24,
+            'RS': 22, 'SA': 24, 'SE': 24, 'SI': 19, 'SK': 24, 'SM': 27, 'TN': 24, 'TR': 26, 'UA': 29, 'VG': 24,
+            'XK': 20
+        };
+
+        function validateIBAN(iban) {
+            const cleanIBAN = iban.replace(/\s/g, '').toUpperCase();
+            
+            // Check if IBAN is empty
+            if (!cleanIBAN) return { valid: false, error: 'IBAN is required' };
+            
+            // Check minimum length
+            if (cleanIBAN.length < 15) return { valid: false, error: 'IBAN is too short' };
+            
+            // Check maximum length
+            if (cleanIBAN.length > 34) return { valid: false, error: 'IBAN is too long' };
+            
+            // Check if starts with 2 letters (country code)
+            if (!/^[A-Z]{2}/.test(cleanIBAN)) {
+                return { valid: false, error: 'IBAN must start with a 2-letter country code' };
+            }
+            
+            // Get country code and check specific length
+            const countryCode = cleanIBAN.substring(0, 2);
+            const expectedLength = IBAN_LENGTHS[countryCode];
+            
+            if (expectedLength && cleanIBAN.length !== expectedLength) {
+                return { valid: false, error: `IBAN for ${countryCode} must be ${expectedLength} characters long` };
+            }
+            
+            // Check if contains only letters and numbers
+            if (!/^[A-Z0-9]+$/.test(cleanIBAN)) {
+                return { valid: false, error: 'IBAN must contain only letters and numbers' };
+            }
+            
+            // MOD-97 validation
+            const rearranged = cleanIBAN.slice(4) + cleanIBAN.slice(0, 4);
+            const numeric = rearranged.replace(/[A-Z]/g, function(match) {
+                return (match.charCodeAt(0) - 55).toString();
+            });
+            
+            let remainder = '';
+            for (let i = 0; i < numeric.length; i++) {
+                remainder = (remainder + numeric.charAt(i)) % 97;
+            }
+            
+            if (remainder !== 1) {
+                return { valid: false, error: 'IBAN checksum is invalid' };
+            }
+            
+            return { valid: true };
+        }
+
+        // Form validation functions
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + 'Error');
+            const formGroup = field.closest('.form-group');
+            
+            formGroup.classList.add('error');
+            errorDiv.textContent = message;
+        }
+
+        function hideError(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + 'Error');
+            const formGroup = field.closest('.form-group');
+            
+            formGroup.classList.remove('error');
+            errorDiv.textContent = '';
+        }
+
+        function validateForm() {
+            let isValid = true;
+            
+            // Clear all previous errors
+            ['recipientName', 'iban', 'reference', 'remittanceInfo'].forEach(fieldId => {
+                hideError(fieldId);
+            });
+            
+            // Validate recipient name
+            const recipientName = document.getElementById('recipientName').value.trim();
+            if (!recipientName) {
+                showError('recipientName', 'Recipient name is required');
+                isValid = false;
+            } else if (recipientName.length > 35) {
+                showError('recipientName', 'Recipient name must be maximum 35 characters');
+                isValid = false;
+            }
+            
+            // Validate IBAN
+            const iban = formatIBAN(document.getElementById('iban').value);
+            const ibanValidation = validateIBAN(iban);
+            if (!ibanValidation.valid) {
+                showError('iban', ibanValidation.error);
+                isValid = false;
+            }
+            
+            // Validate Payment Reference vs Payment Description (only one allowed)
+            const reference = document.getElementById('reference').value.trim();
+            const remittanceInfo = document.getElementById('remittanceInfo').value.trim();
+            
+            if (reference && remittanceInfo) {
+                showError('reference', 'Please use either Payment Reference OR Payment Description, not both');
+                showError('remittanceInfo', 'Please use either Payment Reference OR Payment Description, not both');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        function generateEPCQRCode(data) {
+            const lines = [
+                'BCD',                    // Service Tag
+                '002',                    // Version
+                '1',                      // Character set (UTF-8)
+                'SCT',                    // Identification
+                '',                       // BIC (optional, empty for domestic)
+                data.recipientName,       // Beneficiary Name
+                data.iban,               // Beneficiary Account (IBAN)
+                data.amount ? `EUR${data.amount}` : '', // Amount
+                '',                       // Purpose (optional)
+                data.reference || '',     // Structured Reference
+                data.remittanceInfo || '' // Unstructured Remittance Information
+            ];
+            
+            return lines.join('\n');
+        }
+
+        function generateQRCode(data) {
+            const qrData = generateEPCQRCode(data);
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+
+            try {
+                // Initialize QR code generator
+                const qr = qrcode(0, 'M'); // Type 0 (auto), Error correction level M
+                qr.addData(qrData);
+                qr.make();
+
+                // Create canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const size = 300;
+                const moduleCount = qr.getModuleCount();
+                const cellSize = size / moduleCount;
+                
+                canvas.width = size;
+                canvas.height = size;
+
+                // Draw QR code
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(0, 0, size, size);
+                
+                ctx.fillStyle = '#2D3748';
+                for (let row = 0; row < moduleCount; row++) {
+                    for (let col = 0; col < moduleCount; col++) {
+                        if (qr.isDark(row, col)) {
+                            ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+                        }
+                    }
+                }
+
+                currentQRCode = canvas;
+                qrContainer.appendChild(canvas);
+
+                // Generate SVG version
+                const svg = qr.createSvgTag(cellSize, 0);
+                currentSVG = svg;
+
+                document.getElementById('qrResult').classList.add('show');
+            } catch (error) {
+                console.error('QR Code generation error:', error);
+                alert('Error generating QR code. Please check your input data.');
+            }
+        }
+
+        function downloadQR() {
+            if (!currentQRCode) return;
+
+            const link = document.createElement('a');
+            link.download = 'payment-qr-code.png';
+            link.href = currentQRCode.toDataURL();
+            link.click();
+        }
+
+        function downloadSVG() {
+            if (!currentSVG) return;
+
+            const svgContent = currentSVG.replace(/fill="black"/g, 'fill="#2D3748"');
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = 'payment-qr-code.svg';
+            link.href = url;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Generate example data
+        function generateExample() {
+            // Clear any existing errors
+            ['recipientName', 'iban', 'reference', 'remittanceInfo'].forEach(fieldId => {
+                hideError(fieldId);
+            });
+
+            // Sample data
+            const examples = [
+                {
+                    recipientName: 'Max Mustermann',
+                    iban: 'AT61 1904 3002 3457 3201',
+                    amount: '125.50',
+                    reference: 'INV-2024-001',
+                    remittanceInfo: ''
+                },
+                {
+                    recipientName: 'Maria Schmidt',
+                    iban: 'DE89 3704 0044 0532 0130 00',
+                    amount: '75.00',
+                    reference: '',
+                    remittanceInfo: 'Dinner payment - Thank you!'
+                },
+                {
+                    recipientName: 'Jean Dupont',
+                    iban: 'FR14 2004 1010 0505 0001 3M02 606',
+                    amount: '200.00',
+                    reference: 'REF-2024-456',
+                    remittanceInfo: ''
+                }
+            ];
+
+            // Select random example
+            const example = examples[Math.floor(Math.random() * examples.length)];
+
+            // Fill form fields
+            document.getElementById('recipientName').value = example.recipientName;
+            document.getElementById('iban').value = example.iban;
+            document.getElementById('amount').value = example.amount;
+            document.getElementById('reference').value = example.reference;
+            document.getElementById('remittanceInfo').value = example.remittanceInfo;
+
+            // Add visual feedback
+            const button = document.querySelector('.example-btn');
+            button.textContent = '✅ Example Generated!';
+            button.style.background = '#e6fffa';
+            button.style.borderColor = '#81e6d9';
+            button.style.color = '#234e52';
+            
+            setTimeout(() => {
+                button.textContent = '✨ Generate Example';
+                button.style.background = '#f7fafc';
+                button.style.borderColor = '#e2e8f0';
+                button.style.color = '#4a5568';
+            }, 2000);
+        }
+
+        // Share QR code
+        async function shareQR() {
+            if (!currentQRCode) {
+                alert('Please generate a QR code first!');
+                return;
+            }
+
+            try {
+                // Convert canvas to blob
+                const canvas = currentQRCode;
+                const blob = await new Promise(resolve => {
+                    canvas.toBlob(resolve, 'image/png');
+                });
+
+                // Check if Web Share API is supported (mainly mobile devices)
+                if (navigator.share && navigator.canShare) {
+                    const file = new File([blob], 'payment-qr-code.png', { type: 'image/png' });
+                    
+                    if (navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            title: 'Payment QR Code',
+                            text: 'Scan this QR code to make the payment',
+                            files: [file]
+                        });
+                        return;
+                    }
+                }
+
+                // Fallback for desktop or unsupported devices
+                if (navigator.share) {
+                    // Share the data URL if files are not supported
+                    const dataUrl = canvas.toDataURL('image/png');
+                    await navigator.share({
+                        title: 'Payment QR Code',
+                        text: 'Scan this QR code to make the payment: ' + dataUrl,
+                        url: dataUrl
+                    });
+                } else {
+                    // Final fallback - copy to clipboard
+                    canvas.toBlob(async (blob) => {
+                        try {
+                            await navigator.clipboard.write([
+                                new ClipboardItem({ 'image/png': blob })
+                            ]);
+                            alert('QR code copied to clipboard! 📋');
+                        } catch (err) {
+                            // If clipboard fails, trigger download
+                            const link = document.createElement('a');
+                            link.download = 'payment-qr-code.png';
+                            link.href = canvas.toDataURL();
+                            link.click();
+                            alert('QR code downloaded! 📱');
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error sharing QR code:', error);
+                // Fallback to download
+                const link = document.createElement('a');
+                link.download = 'payment-qr-code.png';
+                link.href = currentQRCode.toDataURL();
+                link.click();
+                alert('QR code downloaded! 📱');
+            }
+        }
+
+        // Check if QR library is loaded
+        window.addEventListener('load', function() {
+            if (!initQRCode()) {
+                console.warn('QR Code library not loaded properly');
+            }
+        });
+
+        // Form handling
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Run validation
+            if (!validateForm()) {
+                return;
+            }
+
+            const formData = new FormData(this);
+            const data = {
+                recipientName: formData.get('recipientName').trim(),
+                iban: formatIBAN(formData.get('iban')),
+                amount: formData.get('amount'),
+                reference: formData.get('reference').trim(),
+                remittanceInfo: formData.get('remittanceInfo').trim()
+            };
+
+            // Additional amount validation
+            if (data.amount && (isNaN(data.amount) || parseFloat(data.amount) <= 0)) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            // Format amount to 2 decimal places if provided
+            if (data.amount) {
+                data.amount = parseFloat(data.amount).toFixed(2);
+            }
+
+            generateQRCode(data);
+        });
+
+        // IBAN formatting on input
+        document.getElementById('iban').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '').toUpperCase();
+            let formatted = value.replace(/(.{4})/g, '$1 ').trim();
+            if (formatted.length > 34 + 8) { // 34 chars + 8 spaces max
+                formatted = formatted.substring(0, 34 + 8);
+            }
+            e.target.value = formatted;
+        });
+
+        // Character counter for remittance info
+        document.getElementById('remittanceInfo').addEventListener('input', function(e) {
+            const maxLength = 140;
+            const currentLength = e.target.value.length;
+            
+            if (currentLength > maxLength) {
+                e.target.value = e.target.value.substring(0, maxLength);
+            }
+        });
+
+        // Real-time validation
+        document.getElementById('recipientName').addEventListener('input', function(e) {
+            const value = e.target.value.trim();
+            if (value.length > 35) {
+                showError('recipientName', 'Recipient name must be maximum 35 characters');
+            } else if (value.length > 0) {
+                hideError('recipientName');
+            }
+        });
+
+        document.getElementById('iban').addEventListener('blur', function(e) {
+            const iban = formatIBAN(e.target.value);
+            if (iban) {
+                const validation = validateIBAN(iban);
+                if (!validation.valid) {
+                    showError('iban', validation.error);
+                } else {
+                    hideError('iban');
+                }
+            }
+        });
+
+        // Real-time validation for Payment Reference vs Payment Description
+        function validatePaymentFields() {
+            const reference = document.getElementById('reference').value.trim();
+            const remittanceInfo = document.getElementById('remittanceInfo').value.trim();
+            
+            if (reference && remittanceInfo) {
+                showError('reference', 'Please use either Payment Reference OR Payment Description, not both');
+                showError('remittanceInfo', 'Please use either Payment Reference OR Payment Description, not both');
+            } else {
+                hideError('reference');
+                hideError('remittanceInfo');
+            }
+        }
+
+        document.getElementById('reference').addEventListener('input', validatePaymentFields);
+        document.getElementById('remittanceInfo').addEventListener('input', validatePaymentFields);
+    </script>
+</body>
+</html>

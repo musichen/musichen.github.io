@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARP-Breakout Trading Bot — Master's Thesis</title>
+<!-- Google Fonts (inlined for offline resilience) -->
+<style>
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/instrumentserif/v5/jizHRFtNs2ka5fXjeivQ4LroWlx-6zATiw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/instrumentserif/v5/jizBRFtNs2ka5fXjeivQ4LroWlx-2zI.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxjPQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8FqtjPQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_qU7NSg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_m07NSg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_d0nNSg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_TknNSg.ttf) format('truetype');
+}
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Google Fonts (inlined for offline resilience) -->
+<style>
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/instrumentserif/v5/jizHRFtNs2ka5fXjeivQ4LroWlx-6zATiw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/instrumentserif/v5/jizBRFtNs2ka5fXjeivQ4LroWlx-2zI.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8-qxjPQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8FqtjPQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_qU7NSg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_m07NSg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_d0nNSg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_TknNSg.ttf) format('truetype');
+}
+</style>
+<style>
+  /* ============ THEME: Editorial Deep Blue + Gold ============ */
+  :root {
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-heading: 'Instrument Serif', 'Georgia', serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #f2efe8;
+    --surface-elevated: #faf8f3;
+    --border: rgba(0,0,0,0.07);
+    --border-bright: rgba(0,0,0,0.14);
+    --text: #1e293b;
+    --text-dim: #64748b;
+    --text-soft: #94a3b8;
+
+    --accent: #1e3a5f;
+    --accent-dim: rgba(30,58,95,0.06);
+    --gold: #b8860b;
+    --gold-dim: rgba(184,134,11,0.08);
+    --blue: #2563eb;
+    --blue-dim: rgba(37,99,235,0.07);
+    --green: #059669;
+    --green-dim: rgba(5,150,105,0.08);
+    --red: #dc2626;
+    --red-dim: rgba(220,38,38,0.07);
+    --amber: #d97706;
+    --amber-dim: rgba(217,119,6,0.08);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #1e2837;
+      --surface-elevated: #243044;
+      --border: rgba(255,255,255,0.06);
+      --border-bright: rgba(255,255,255,0.12);
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --text-soft: #64748b;
+
+      --accent: #e2c06e;
+      --accent-dim: rgba(226,192,110,0.08);
+      --gold: #e2c06e;
+      --gold-dim: rgba(226,192,110,0.1);
+      --blue: #60a5fa;
+      --blue-dim: rgba(96,165,250,0.1);
+      --green: #34d399;
+      --green-dim: rgba(52,211,153,0.1);
+      --red: #f87171;
+      --red-dim: rgba(248,113,113,0.1);
+      --amber: #fbbf24;
+      --amber-dim: rgba(251,191,36,0.1);
+    }
+  }
+
+  /* ============ RESET & BASE ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 15% 8%, var(--accent-dim) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 90%, var(--gold-dim) 0%, transparent 55%);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  a { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }
+
+  /* ============ LAYOUT ============ */
+  .page { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 64px 0 48px;
+    text-align: center;
+    position: relative;
+  }
+  .hero__badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: var(--gold-dim);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--accent);
+    max-width: 850px;
+    margin: 0 auto 16px;
+  }
+  .hero__subtitle {
+    font-size: 18px;
+    color: var(--text-dim);
+    max-width: 650px;
+    margin: 0 auto 32px;
+  }
+  .hero__meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-soft);
+  }
+  .hero__meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hero__meta .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+  /* ============ SECTION HEADER ============ */
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--accent);
+    margin-bottom: 24px;
+  }
+
+  /* ============ CARDS ============ */
+  .ve-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    transition: box-shadow 0.2s;
+  }
+  .ve-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .ve-card--hero {
+    background: color-mix(in srgb, var(--surface) 94%, var(--accent) 6%);
+    border-color: color-mix(in srgb, var(--border) 60%, var(--accent) 40%);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .ve-card--elevated {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .ve-card--recessed {
+    background: color-mix(in srgb, var(--bg) 70%, var(--surface) 30%);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+    border-color: var(--border);
+  }
+  .ve-card__label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ve-card__label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+  /* ============ GRID LAYOUTS ============ */
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+
+  /* ============ KPI CARD ============ */
+  .kpi {
+    text-align: center;
+    padding: 28px 20px;
+  }
+  .kpi__value {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 400;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi__label {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+  .kpi--gold .kpi__value { color: var(--gold); }
+  .kpi--green .kpi__value { color: var(--green); }
+  .kpi--blue .kpi__value { color: var(--blue); }
+  .kpi--red .kpi__value { color: var(--red); }
+
+  /* ============ RESEARCH QUESTION CARD ============ */
+  .rq-card {
+    border-left: 4px solid var(--gold);
+    padding: 20px 24px;
+  }
+  .rq-card__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .rq-card__question {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--text);
+  }
+  .rq-card__answer {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  /* ============ TABLE ============ */
+  .table-wrap {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .table-scroll { overflow-x: auto; }
+  .table-scroll table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .table-scroll thead { position: sticky; top: 0; z-index: 1; }
+  .table-scroll th {
+    background: var(--surface2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .table-scroll td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .table-scroll tr:last-child td { border-bottom: none; }
+  .table-scroll tr:nth-child(even) td { background: var(--surface-elevated); }
+  .table-scroll tr:hover td { background: color-mix(in srgb, var(--surface) 90%, var(--accent) 10%); }
+  .table-scroll .num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--font-mono); font-size: 13px; }
+
+  /* ============ STATUS BADGES ============ */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .badge--pass { color: var(--green); background: var(--green-dim); }
+  .badge--fail { color: var(--red); background: var(--red-dim); }
+  .badge--warn { color: var(--amber); background: var(--amber-dim); }
+  .badge--info { color: var(--blue); background: var(--blue-dim); }
+  .badge__dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  /* ============ PROS/CONS ============ */
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .pros-list, .cons-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .pros-list li, .cons-list li {
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .pros-list li { background: var(--green-dim); border-left: 3px solid var(--green); }
+  .cons-list li { background: var(--red-dim); border-left: 3px solid var(--red); }
+  .pros-list li::before { content: '+'; color: var(--green); font-weight: 700; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .cons-list li::before { content: '−'; color: var(--red); font-weight: 700; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ============ DIAGRAM CONTAINER ============ */
+  .diagram-shell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .mermaid-wrap {
+    position: relative;
+    background: var(--surface);
+    padding: 24px;
+    overflow: hidden;
+  }
+  .mermaid-canvas { display: flex; justify-content: center; align-items: center; min-height: 300px; }
+  .mermaid-canvas svg { max-width: 100%; height: auto; }
+  .zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 14px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .zoom-controls button {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .zoom-controls button:hover { color: var(--text); border-color: var(--border-bright); background: var(--surface-elevated); }
+  .zoom-controls button:active { background: var(--accent-dim); }
+  .zoom-level {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    min-width: 48px;
+    text-align: center;
+  }
+
+  /* ============ MERMAID OVERRIDES ============ */
+  .mermaid .nodeLabel { color: var(--text) !important; }
+  .mermaid .edgeLabel { color: var(--text-dim) !important; background-color: var(--surface) !important; }
+  .mermaid .edgeLabel rect { fill: var(--surface) !important; stroke: none !important; }
+  .mermaid .edgePath .path { stroke: var(--text-soft) !important; }
+  .mermaid .marker { fill: var(--text-soft) !important; stroke: var(--text-soft) !important; }
+  .mermaid .cluster rect { fill: var(--surface2) !important; stroke: var(--border) !important; }
+  .mermaid .cluster text { fill: var(--text-dim) !important; }
+
+  /* ============ FILE STRUCTURE ============ */
+  .file-structure { margin-top: 16px; }
+  .file-structure__path {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .file-structure__outline { list-style: none; padding-left: 0; }
+  .file-structure__outline li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .file-structure__outline li:last-child { border-bottom: none; }
+  .file-structure__outline code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--blue);
+    background: var(--blue-dim);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* ============ CALLOUT ============ */
+  .callout {
+    padding: 16px 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--gold);
+    background: var(--gold-dim);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .callout strong { color: var(--accent); }
+
+  /* ============ DETAILS ============ */
+  details {
+    margin-top: 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  details summary {
+    padding: 12px 18px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+    cursor: pointer;
+    user-select: none;
+    background: var(--surface2);
+    transition: background 0.15s;
+  }
+  details summary:hover { background: var(--surface-elevated); }
+  details[open] summary { border-bottom: 1px solid var(--border); }
+
+  /* ============ FOOTER ============ */
+  .page-footer {
+    margin-top: 64px;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-soft);
+    text-align: center;
+  }
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-fade { animation: fadeUp 0.6s ease-out both; }
+  .anim-fade:nth-child(1) { animation-delay: 0s; }
+  .anim-fade:nth-child(2) { animation-delay: 0.08s; }
+  .anim-fade:nth-child(3) { animation-delay: 0.16s; }
+  .anim-fade:nth-child(4) { animation-delay: 0.24s; }
+  .anim-fade:nth-child(5) { animation-delay: 0.32s; }
+  .anim-fade:nth-child(6) { animation-delay: 0.4s; }
+  .anim-fade:nth-child(7) { animation-delay: 0.48s; }
+  .anim-fade:nth-child(8) { animation-delay: 0.56s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .anim-fade { animation: none; }
+  }
+
+  /* ============ PRINT STYLES (for PDF export) ============ */
+  @media print {
+    body {
+      background: white !important;
+      background-image: none !important;
+      color: #1e293b !important;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .page { max-width: 100%; padding: 0 12px; }
+    .hero { padding: 20px 0 16px; }
+    .hero h1 { font-size: 24px; color: #1e3a5f !important; }
+    .hero__subtitle { font-size: 13px; color: #475569 !important; }
+    .hero__meta { font-size: 10px; color: #94a3b8 !important; }
+    .hero__badge { font-size: 9px; padding: 3px 10px; margin-bottom: 12px; }
+    .section-title { font-size: 20px; margin-bottom: 12px; }
+    .section-label { font-size: 8px; margin-bottom: 6px; }
+    .ve-card, .ve-card--hero, .ve-card--elevated, .ve-card--recessed {
+      background: white !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: none !important;
+    }
+    .ve-card--hero { border-left: 4px solid #b8860b !important; }
+    .kpi__value { font-size: 28px; }
+    .kpi__label { font-size: 10px; }
+    .grid-5 { grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .grid-3 { gap: 10px; }
+    .grid-2 { gap: 10px; }
+    .pros-cons { gap: 10px; }
+    .pros-list li, .cons-list li { font-size: 11px; padding: 8px 12px; }
+    .rq-card__question { font-size: 14px; }
+    .rq-card__answer { font-size: 11px; }
+    .table-scroll th { font-size: 9px; padding: 6px 8px; }
+    .table-scroll td { font-size: 11px; padding: 6px 8px; }
+    .diagram-shell { border-color: #e2e8f0 !important; }
+    .mermaid-wrap { padding: 12px; background: white !important; }
+    .zoom-controls { display: none; }
+    .callout { font-size: 11px; background: #fefce8 !important; border-color: #e2c06e !important; }
+    .page-footer { font-size: 9px; padding: 12px 0; margin-top: 24px; }
+    .badge { font-size: 9px; padding: 2px 8px; }
+
+    /* Force page breaks before major sections */
+    section {
+      page-break-inside: avoid;
+    }
+    .hero { page-break-after: avoid; }
+    .diagram-shell { page-break-inside: avoid; }
+    .table-wrap { page-break-inside: avoid; }
+    .ve-card--hero { page-break-inside: avoid; }
+    details { page-break-inside: avoid; }
+
+    /* Ensure Mermaid SVGs fit within page */
+    .mermaid-canvas svg {
+      max-width: 100% !important;
+      max-height: 500px !important;
+    }
+
+    /* No animations in print */
+    .anim-fade { animation: none !important; opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 32px; }
+    .section-title { font-size: 26px; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-5 { grid-template-columns: repeat(2, 1fr); }
+    .pros-cons { grid-template-columns: 1fr; }
+    .hero__meta { gap: 16px; }
+    .page { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== HERO ==================== -->
+<header class="hero anim-fade">
+  <div class="page">
+    <div class="hero__badge">Master's Thesis · 2014</div>
+    <h1>Parametric Adaptive Breakout Trading Bot</h1>
+    <p class="hero__subtitle">
+      Automated decision-making for stock market portfolio management using a daily volatility filter breakout strategy implemented on NYSE equities
+    </p>
+    <div class="hero__meta">
+      <span><span class="dot"></span> Oleksandr Muzychenko</span>
+      <span><span class="dot"></span> Kharkiv National University of Economics</span>
+      <span><span class="dot"></span> Technikum Wien</span>
+      <span><span class="dot"></span> 2011–2013 · 2.5 Years of Data</span>
+    </div>
+  </div>
+</header>
+
+<!-- ==================== KEY METRICS ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="grid-5" style="margin-bottom: 0;">
+    <div class="ve-card ve-card--elevated kpi kpi--green">
+      <div class="kpi__value">+75.9%</div>
+      <div class="kpi__label">Net Profit<br>on $50K Starting Capital</div>
+    </div>
+    <div class="ve-card ve-card--elevated kpi kpi--gold">
+      <div class="kpi__value">24,238</div>
+      <div class="kpi__label">Total Trades<br>Over 2.5 Years</div>
+    </div>
+    <div class="ve-card ve-card--elevated kpi kpi--blue">
+      <div class="kpi__value">2.05</div>
+      <div class="kpi__label">Sharpe Ratio<br>(Excellent ≥ 2.0 by Sharpe Method)</div>
+    </div>
+    <div class="ve-card ve-card--elevated kpi kpi--green">
+      <div class="kpi__value">4.28</div>
+      <div class="kpi__label">Recovery Factor<br>(2× Minimum by Yoshito Method)</div>
+    </div>
+    <div class="ve-card ve-card--elevated kpi">
+      <div class="kpi__value">−13.5%</div>
+      <div class="kpi__label">Max Drawdown<br>Risking 13.5% to Earn 75.9%</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABSTRACT ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="ve-card ve-card--hero">
+    <div class="ve-card__label">Abstract</div>
+    <p style="font-family: var(--font-heading); font-size: 18px; font-style: italic; line-height: 1.5; margin-bottom: 16px; color: var(--accent);">
+      "Computers are now being used to generate news stories about company earnings results or economic statistics as they are released. And this almost instantaneous information forms a direct feed into other computers which trade on the news."
+      <span style="display: block; font-style: normal; font-size: 13px; color: var(--text-dim); margin-top: 6px; font-family: var(--font-body);">— Financial Times</span>
+    </p>
+    <p style="font-size: 15px; color: var(--text-dim); line-height: 1.7;">
+      This thesis explores how modern software solutions facilitate automated decision-making on stock markets. It proposes and implements an <strong>Adaptive Reversal Parametric Breakout strategy</strong> based on a Daily Volatility Filter, deployed via a C#/S# + Wealth-Lab automated trading system. The strategy was tested on 80 NYSE and MICEX stocks, filtered to a 25-stock NYSE portfolio, and backtested on 2.5 years of real market data — generating 75.9% net profit with a 13.5% maximum drawdown.
+    </p>
+  </div>
+</section>
+
+<!-- ==================== RESEARCH QUESTIONS ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">Research Framework</div>
+  <h2 class="section-title">Five Research Questions</h2>
+  <div class="grid-2" style="gap: 16px;">
+    <div class="ve-card rq-card">
+      <div class="rq-card__num">RQ 01</div>
+      <div class="rq-card__question">Active or passive portfolio management?</div>
+      <div class="rq-card__answer">Markets are inefficient (Haugen 1995; Rosenberg &amp; Reid 1998). Active management exploits inefficiencies — automated systems are essential to detect them in real-time.</div>
+    </div>
+    <div class="ve-card rq-card">
+      <div class="rq-card__num">RQ 02</div>
+      <div class="rq-card__question">Technical or fundamental analysis?</div>
+      <div class="rq-card__answer">FA suits passive "buy &amp; hold." TA suits active trading — it is formalizable, computationally tractable, and automatable. TA is the foundation for trading robots.</div>
+    </div>
+    <div class="ve-card rq-card">
+      <div class="rq-card__num">RQ 03</div>
+      <div class="rq-card__question">What trading strategies exist &amp; how to classify them?</div>
+      <div class="rq-card__answer">Two broad classes: <strong>Execution</strong> (Iceberg, TWAP, VWAP — order splitting) and <strong>Speculative</strong> (Trendline, Pullback, Breakout, Arbitrage, Scalping). Breakout offers the best automation trade-off.</div>
+    </div>
+    <div class="ve-card rq-card">
+      <div class="rq-card__num">RQ 04</div>
+      <div class="rq-card__question">What platform &amp; architecture for trading robots?</div>
+      <div class="rq-card__answer">C# + S# (Stock Sharp) + Wealth-Lab provides multi-core HFT support, DMA connectivity, and emulation >1M events/sec. Six infrastructure options analyzed (A–F), with DMA recommended.</div>
+    </div>
+    <div class="ve-card rq-card" style="grid-column: 1 / -1;">
+      <div class="rq-card__num">RQ 05</div>
+      <div class="rq-card__question">Which strategy to choose for successful automated trading?</div>
+      <div class="rq-card__answer">The ARP-Breakout strategy: <strong>simple, reversible, adaptive.</strong> It learns the daily trading range via a volatility filter, enters on breakouts, and manages positions with trailing stops tied to ATR — all controlled through 14 optimized parameters.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ATS ARCHITECTURE ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">System Architecture</div>
+  <h2 class="section-title">Automated Trading System Infrastructure</h2>
+  <p style="color: var(--text-dim); margin-bottom: 24px; font-size: 15px;">
+    The recommended architecture for active portfolio management using direct market access (DMA) via Plaza II or MICEX gateway.
+  </p>
+  <div class="diagram-shell">
+    <div class="zoom-controls">
+      <button id="zoom-out" title="Zoom out">−</button>
+      <span class="zoom-level" id="zoom-level">100%</span>
+      <button id="zoom-in" title="Zoom in">+</button>
+      <button id="zoom-reset" title="Reset zoom">↺</button>
+      <button id="zoom-expand" title="Open full-size in new tab" style="margin-left:auto;">⛶</button>
+    </div>
+    <div class="mermaid-wrap">
+      <div class="mermaid-canvas" id="arch-diagram">
+<pre class="mermaid">
+graph TD
+  subgraph Ext["External Data Sources"]
+    DS["📡 Data Service<br/><small>finam.ru / finviz.com</small>"]
+  end
+
+  subgraph Core["Core Trading Robot — Wealth-Lab + S#"]
+    WL["Wealth-Lab<br/><small>Technical Analysis Engine</small>"]
+    WLRT["WLRTStreamingDataProvider<br/><small>Real-time Data Stream</small>"]
+    ADAPTER["WLRTQuikBrokerAdapter<br/><small>Order Sync &amp; Feedback</small>"]
+  end
+
+  subgraph TS["Trading Terminal"]
+    QUIK["QUIK Terminal<br/><small>FINAM Broker</small>"]
+  end
+
+  subgraph Mart["Market Infrastructure"]
+    DMA["DMA Gateway<br/><small>Plaza II / MICEX</small>"]
+    EXCH["Stock Exchange<br/><small>NYSE / MICEX</small>"]
+    CLEAR["Internal Clearing Server<br/><small>Dual-position Management</small>"]
+    STOP["Stop Order Server<br/><small>Guaranteed Stop Execution</small>"]
+    STRAT["Strategy Execution Server<br/><small>Order Dispatch &amp; Receive</small>"]
+  end
+
+  DS -->|"historical + live data"| WL
+  WL -->|"strategy signals"| WLRT
+  WLRT -->|"real-time quotes"| QUIK
+  WL -->|"trade orders"| ADAPTER
+  ADAPTER -->|"send + monitor orders"| QUIK
+  QUIK -->|"position sync"| ADAPTER
+  QUIK --> DMA
+  DMA --> EXCH
+  STRAT --> DMA
+  STOP --> DMA
+  CLEAR --> STRAT
+  STRAT --> STOP
+</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STRATEGY FLOW ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">Strategy Logic</div>
+  <h2 class="section-title">ARP-Breakout Strategy Flow</h2>
+  <p style="color: var(--text-dim); margin-bottom: 24px; font-size: 15px;">
+    The strategy skips early bars, watches for breakouts within the daily volatility range, and manages exits with multi-level trailing stops.
+  </p>
+  <div class="diagram-shell">
+    <div class="zoom-controls">
+      <button onclick="zoomDiagram('flow', -10)">−</button>
+      <span class="zoom-level" id="flow-level">100%</span>
+      <button onclick="zoomDiagram('flow', 10)">+</button>
+      <button onclick="zoomDiagram('flow', 0, true)">↺</button>
+      <button onclick="openMermaidInNewTab('flow-diagram')" style="margin-left:auto;">⛶</button>
+    </div>
+    <div class="mermaid-wrap">
+      <div class="mermaid-canvas" id="flow-diagram">
+<pre class="mermaid">
+flowchart TD
+  START(["Session Start"]) --> SKIP["Skip L_Start_bar bars<br/><small>Parameter: 1–10</small>"]
+  SKIP --> WATCH["Watch L_Start_period bars<br/><small>Parameter: 1–10</small>"]
+  WATCH --> CHK{"Close breaks<br/>session high/low?"}
+  CHK -- No --> WATCH
+  CHK -- Yes --> VOL{"Within Volatility Filter?<br/><small>L_Open_Filter % of daily vol</small>"}
+  VOL -- No --> WATCH
+  VOL -- Yes --> DIR{"Direction?"}
+  DIR -- "Breakout Up" --> LONG["Open LONG Position"]
+  DIR -- "Breakout Down" --> SHORT["Open SHORT Position"]
+  LONG --> INIT["Set Initial Stop-Loss<br/><small>L_Initial_SL % of daily vol</small>"]
+  SHORT --> INIT
+  INIT --> PIVOT{"New Local Pivot<br/>formed?<br/><small>Fast_Pivot_Period</small>"}
+  PIVOT -- Yes --> PIVOT_SL["Trail Stop to<br/>L_Pivot_SL % of ATR"]
+  PIVOT -- No --> MA_CHK{"Price crosses<br/>Fast_MA?<br/><small>Fast_MA_Period</small>"}
+  PIVOT_SL --> MA_CHK
+  MA_CHK -- Yes --> TRAIL["Trail Stop at<br/>L_Trailing_SL % of max profit"]
+  MA_CHK -- No --> PROFIT{"Profit > L_Trailing_SL_Level<br/>% of daily vol?"}
+  PROFIT -- Yes --> TAKE["Take profit at<br/>L_Trailing_SL_percent %"]
+  PROFIT -- No --> PIVOT
+  TRAIL --> PIVOT
+  TAKE --> EXIT(["Exit Position"])
+</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STRATEGY PARAMETERS ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">Strategy Parameters</div>
+  <h2 class="section-title">14 Parameters for Optimization</h2>
+  <p style="color: var(--text-dim); margin-bottom: 20px; font-size: 15px;">
+    Each parameter was optimized using the Non-Gradient Monte Carlo Method to avoid brute-force computation (which would require ~2×10<sup>50</sup> iterations).
+  </p>
+  <div class="table-wrap">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Parameter</th><th>Purpose</th><th>Range</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><code>Fast Pivot Period</code></td><td>Period for detecting local pivot extremes</td><td class="num">2–7</td></tr>
+          <tr><td>2</td><td><code>Fast MA Period</code></td><td>Period for simple moving average of closing price</td><td class="num">0–20</td></tr>
+          <tr><td>3</td><td><code>L Start Bar</code></td><td>Bars to skip after session open before monitoring begins</td><td class="num">1–10</td></tr>
+          <tr><td>4</td><td><code>L Start Period</code></td><td>Period for checking position-open conditions</td><td class="num">1–10</td></tr>
+          <tr><td>5</td><td><code>L Back Period</code></td><td>Check period for price change at position open</td><td class="num">1–6</td></tr>
+          <tr><td>6</td><td><code>L Initial SL</code></td><td>Initial stop-loss as % of daily volatility (first entry)</td><td class="num">50–300</td></tr>
+          <tr><td>7</td><td><code>L Initial SL 2</code></td><td>Initial stop-loss as % of daily vol (re-entry after loss)</td><td class="num">50–300</td></tr>
+          <tr><td>8</td><td><code>L Pivot SL</code></td><td>Stop level after new local extremum, % of ATR from last pivot</td><td class="num">50–200</td></tr>
+          <tr><td>9</td><td><code>L Max Point SL</code></td><td>Maximum drawdown in points relative to max profit</td><td class="num">10–50</td></tr>
+          <tr><td>10</td><td><code>L Trailing SL Level</code></td><td>% of daily vol at which trailing stop activates</td><td class="num">50–200</td></tr>
+          <tr><td>11</td><td><code>L Trailing SL Percent</code></td><td>% of max profit to take when trailing stop triggers</td><td class="num">10–60</td></tr>
+          <tr><td>12</td><td><code>L Open Filter</code></td><td>Max % of daily vol the price may move to open a position</td><td class="num">10–100</td></tr>
+          <tr><td>13</td><td><code>L Open Filter 2</code></td><td>Max % of daily vol in opposite direction to open</td><td class="num">10</td></tr>
+          <tr><td>14</td><td><code>L Open Filter 3</code></td><td>ATR/daily vol ratio to allow pivot re-entry after loss</td><td class="num">10–100</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PORTFOLIO SELECTION ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">Portfolio Selection</div>
+  <h2 class="section-title">Stock Filtering: NYSE vs. MICEX</h2>
+  <p style="color: var(--text-dim); margin-bottom: 20px; font-size: 15px;">
+    80 stocks tested across two exchanges. Only those with non-negative strategy returns were selected into the final portfolio.
+  </p>
+
+  <div class="callout" style="margin-bottom: 24px;">
+    <strong>Filtering Principle:</strong> Rather than selecting by P/E ratio or market cap, stocks are selected by <strong>strategy compatibility</strong> — the strategy itself determines which stocks belong in the portfolio. The portfolio can be rebalanced periodically by re-running the filter.
+  </div>
+
+  <div class="grid-2" style="margin-bottom: 24px;">
+    <div class="ve-card ve-card--elevated" style="text-align: center;">
+      <div class="ve-card__label">MICEX (Russian Exchange)</div>
+      <div style="font-family: var(--font-heading); font-size: 42px; color: var(--red);">7 / 40</div>
+      <div style="font-size: 14px; color: var(--text-dim); margin-top: 4px;">Stocks passed the strategy filter</div>
+      <div style="font-size: 12px; color: var(--text-soft); margin-top: 8px;">
+        GAZP, SBER03, MRKH, URKA, GRAZ, SVAV, MNOD
+      </div>
+      <div class="badge badge--fail" style="margin-top: 12px;">Unsuitable — quality of trades too low</div>
+    </div>
+    <div class="ve-card ve-card--elevated" style="text-align: center;">
+      <div class="ve-card__label">NYSE (New York Stock Exchange)</div>
+      <div style="font-family: var(--font-heading); font-size: 42px; color: var(--green);">25 / 40</div>
+      <div style="font-size: 14px; color: var(--text-dim); margin-top: 4px;">Stocks passed the strategy filter</div>
+      <div style="font-size: 12px; color: var(--text-soft); margin-top: 8px;">
+        AAPL, ADBE, AIG, AMT, BA, BRCM, CAT, CSCO, CVX, DD, DIS, FSLR, GE, GOOG, HPQ, IBM, INTC, JNJ, JPM, KO, MCD, MSFT, PG, T, VZ
+      </div>
+      <div class="badge badge--pass" style="margin-top: 12px;">Selected — 25-stock NYSE portfolio formed</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PERFORMANCE RESULTS ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">Backtest Results</div>
+  <h2 class="section-title">Performance on Real Market Data</h2>
+  <p style="color: var(--text-dim); margin-bottom: 20px; font-size: 15px;">
+    Portfolio simulation over 2.5 years of NYSE data (2011–2013) with $50,000 starting capital. Includes commission costs.
+  </p>
+
+  <div class="table-wrap" style="margin-bottom: 24px;">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Metric</th><th>All Trades</th><th>Long</th><th>Short</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Starting Capital</td><td class="num">$50,000</td><td class="num">$50,000</td><td class="num">$50,000</td></tr>
+          <tr><td>Ending Capital</td><td class="num"><strong>$87,971</strong></td><td class="num">$72,944</td><td class="num">$65,026</td></tr>
+          <tr><td><strong>Net Profit</strong></td><td class="num"><strong>$37,971 (75.9%)</strong></td><td class="num">$22,944 (43.9%)</td><td class="num">$15,026 (32.1%)</td></tr>
+          <tr><td>Annualized Gain</td><td class="num">70.9%</td><td class="num">41.2%</td><td class="num">30.2%</td></tr>
+          <tr><td>Total Commission</td><td class="num">−$48,475</td><td class="num">−$25,573</td><td class="num">−$22,902</td></tr>
+          <tr><td>Exposure</td><td class="num">209.7%</td><td class="num">139.4%</td><td class="num">103.0%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom: 24px;">
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Trade Statistics</th><th>All</th><th>Long</th><th>Short</th></tr></thead>
+          <tbody>
+            <tr><td>Number of Trades</td><td class="num">24,238</td><td class="num">12,787</td><td class="num">11,451</td></tr>
+            <tr><td>Average Profit</td><td class="num">$1.57</td><td class="num">$1.72</td><td class="num">$1.40</td></tr>
+            <tr><td>Avg Bars Held</td><td class="num">27.9</td><td class="num">28.9</td><td class="num">~42</td></tr>
+            <tr><td>Winning Trades</td><td class="num">8,387</td><td class="num">4,434</td><td class="num">3,953</td></tr>
+            <tr><td><span class="badge badge--pass">Win Rate</span></td><td class="num">34.6%</td><td class="num">34.7%</td><td class="num">34.5%</td></tr>
+            <tr><td>Avg Win</td><td class="num">$48.12</td><td class="num">$48.90</td><td class="num">$47.24</td></tr>
+            <tr><td>Losing Trades</td><td class="num">15,851</td><td class="num">8,353</td><td class="num">7,498</td></tr>
+            <tr><td><span class="badge badge--fail">Loss Rate</span></td><td class="num">65.4%</td><td class="num">65.3%</td><td class="num">65.5%</td></tr>
+            <tr><td>Avg Loss</td><td class="num">−$23.06</td><td class="num">−$23.33</td><td class="num">−$22.77</td></tr>
+            <tr><td>Max Consec. Wins</td><td class="num">17</td><td class="num">22</td><td class="num">35</td></tr>
+            <tr><td>Max Consec. Losses</td><td class="num">27</td><td class="num">84</td><td class="num">41</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Risk &amp; Quality Metrics</th><th>All</th><th>Long</th><th>Short</th></tr></thead>
+          <tbody>
+            <tr><td>Max Drawdown</td><td class="num"><span class="badge badge--pass">−$8,904 (−13.5%)</span></td><td class="num">−$11,731</td><td class="num">−$12,496</td></tr>
+            <tr><td>Wealth-Lab Score</td><td class="num">29.3</td><td class="num">23.5</td><td class="num">23.1</td></tr>
+            <tr><td><strong>Sharpe Ratio</strong></td><td class="num"><span class="badge badge--pass">2.05</span></td><td class="num">1.46</td><td class="num">0.98</td></tr>
+            <tr><td>Profit Factor</td><td class="num">1.10</td><td class="num">1.11</td><td class="num">1.09</td></tr>
+            <tr><td><strong>Recovery Factor</strong></td><td class="num"><span class="badge badge--pass">4.28</span></td><td class="num">1.87</td><td class="num">1.28</td></tr>
+            <tr><td><strong>Payoff Ratio</strong></td><td class="num">1.88</td><td class="num">1.89</td><td class="num">1.87</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Key insight:</strong> Despite a 65.4% loss rate, the strategy is profitable because the <strong>payoff ratio of 1.88</strong> means each winning trade earns nearly twice what a losing trade costs. The 2.05 Sharpe ratio and 4.28 recovery factor confirm the system meets professional quality thresholds (Sharpe ≥ 2.0; Yoshito Recovery ≥ 2.0).
+  </div>
+</section>
+
+<!-- ==================== PROS / CONS ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">Trading Robots</div>
+  <h2 class="section-title">Advantages &amp; Disadvantages</h2>
+  <div class="pros-cons">
+    <div>
+      <div class="badge badge--pass" style="margin-bottom: 16px;">Advantages</div>
+      <ul class="pros-list">
+        <li><span><strong>Speed.</strong> Monitors hundreds of securities simultaneously, makes decisions and executes orders in milliseconds.</span></li>
+        <li><span><strong>Accuracy.</strong> No button-press mistakes, no misread prices, no calculation errors.</span></li>
+        <li><span><strong>Inexhaustibility.</strong> Works 24/7 without fatigue — never misses signals from exhaustion or loss of concentration.</span></li>
+        <li><span><strong>No Emotions.</strong> Follows the algorithm precisely — never hesitates to cut losses, never gets greedy on winning streaks.</span></li>
+        <li><span><strong>Scalability.</strong> Can simultaneously trade multiple strategies across hundreds of instruments.</span></li>
+      </ul>
+    </div>
+    <div>
+      <div class="badge badge--fail" style="margin-bottom: 16px;">Disadvantages</div>
+      <ul class="cons-list">
+        <li><span><strong>Cost.</strong> Professional robots cost €1,000–5,000+ to develop. HFT may require colocation in exchange data centers.</span></li>
+        <li><span><strong>System Failures.</strong> If code has a bug, the robot repeats the same mistake systematically — multiplying losses.</span></li>
+        <li><span><strong>Rigidity.</strong> Cannot adapt to unprecedented market events outside its training parameters.</span></li>
+        <li><span><strong>No Judgment.</strong> Will drain capital following strategy signals during black swan events — requires human oversight.</span></li>
+        <li><span><strong>Over-optimization Risk.</strong> A curve-fitted strategy may excel in backtests but fail on future data.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER STRUCTURE ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">Thesis Roadmap</div>
+  <h2 class="section-title">Seven Chapters</h2>
+  <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div class="ve-card" style="display: flex; align-items: flex-start; gap: 20px;">
+      <div style="font-family: var(--font-heading); font-size: 28px; color: var(--gold); min-width: 40px; line-height: 1;">1</div>
+      <div>
+        <strong style="font-size: 15px;">Introduction</strong>
+        <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">Problem definition, 5 research questions, goals, motivation, and scope. Target: individual traders, hedge fund managers, banks, and financial institutions.</p>
+      </div>
+    </div>
+    <div class="ve-card" style="display: flex; align-items: flex-start; gap: 20px;">
+      <div style="font-family: var(--font-heading); font-size: 28px; color: var(--gold); min-width: 40px; line-height: 1;">2</div>
+      <div>
+        <strong style="font-size: 15px;">Automated Trading on Stock Market</strong>
+        <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">Defines algorithmic trading. Quantifies market impact: 30–70% of Wall Street volume, 60% on Russian exchanges. Discusses quotation vs. market orders and exchange protective mechanisms against HFT overload.</p>
+      </div>
+    </div>
+    <div class="ve-card" style="display: flex; align-items: flex-start; gap: 20px;">
+      <div style="font-family: var(--font-heading); font-size: 28px; color: var(--gold); min-width: 40px; line-height: 1;">3</div>
+      <div>
+        <strong style="font-size: 15px;">Trading Robots: Types &amp; Platforms</strong>
+        <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">Covers automatic vs. semi-automatic robots (advisers, scanners, utilities). Evaluates platforms: QPILE, Excel+VBA, C++/Delphi, C#/S#+WealthLab. Presents 6 architecture options (A–F) from internet-connected broker to DMA colocation.</p>
+      </div>
+    </div>
+    <div class="ve-card" style="display: flex; align-items: flex-start; gap: 20px;">
+      <div style="font-family: var(--font-heading); font-size: 28px; color: var(--gold); min-width: 40px; line-height: 1;">4</div>
+      <div>
+        <strong style="font-size: 15px;">Stock Market Analysis Tools</strong>
+        <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">Fundamental vs. technical analysis. Deep coverage of indicators: Moving Averages, Oscillators, RSI, Bollinger Bands, MACD, Fibonacci levels. Reviews MetaStock, Wealth-Lab, Omega as software facilitators.</p>
+      </div>
+    </div>
+    <div class="ve-card" style="display: flex; align-items: flex-start; gap: 20px;">
+      <div style="font-family: var(--font-heading); font-size: 28px; color: var(--gold); min-width: 40px; line-height: 1;">5</div>
+      <div>
+        <strong style="font-size: 15px;">Trading Strategies Overview</strong>
+        <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">Classification: execution strategies (Iceberg, TWAP, VWAP) vs. speculative strategies (Trendline, Pullback, Breakout, Arbitrage, Scalping). Evaluates each for automation difficulty and speed requirements.</p>
+      </div>
+    </div>
+    <div class="ve-card ve-card--hero" style="display: flex; align-items: flex-start; gap: 20px;">
+      <div style="font-family: var(--font-heading); font-size: 28px; color: var(--gold); min-width: 40px; line-height: 1;">6</div>
+      <div>
+        <strong style="font-size: 15px;">ARP-Breakout Strategy Implementation</strong>
+        <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">The practical core: tool selection (QUIK + Wealth-Lab + C#/S#), architecture design, 14-parameter strategy description, Monte Carlo optimization, stock filtering (80 → 25), portfolio backtest over 2.5 years of NYSE data.</p>
+      </div>
+    </div>
+    <div class="ve-card" style="display: flex; align-items: flex-start; gap: 20px;">
+      <div style="font-family: var(--font-heading); font-size: 28px; color: var(--gold); min-width: 40px; line-height: 1;">7</div>
+      <div>
+        <strong style="font-size: 15px;">Conclusions &amp; Further Research</strong>
+        <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">Summarizes advantages/disadvantages of trading robots. Proposes future directions: multi-algorithm trading, strategy portfolios, strategy-of-strategies evaluation, automated market inefficiency detection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TOOLS COMPARISON ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">Platform Selection</div>
+  <h2 class="section-title">Trading Robot Development Platforms</h2>
+  <div class="table-wrap">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Platform</th><th>Speed</th><th>Complexity</th><th>Best For</th><th>Suitability for HFT</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>QPILE (QUIK)</strong></td>
+            <td><span class="badge badge--fail">~1 sec/iteration</span></td>
+            <td>Low</td>
+            <td>Simple robots, semi-automated utilities, learning</td>
+            <td><span class="badge badge--fail">No</span></td>
+          </tr>
+          <tr>
+            <td><strong>Excel + VBA</strong></td>
+            <td><span class="badge badge--warn">Moderate</span></td>
+            <td>Medium</td>
+            <td>Advanced investors, GUI-controlled robots</td>
+            <td><span class="badge badge--fail">No</span></td>
+          </tr>
+          <tr>
+            <td><strong>C++ / Delphi</strong></td>
+            <td><span class="badge badge--pass">Milliseconds</span></td>
+            <td>Very High</td>
+            <td>Professional HFT, scalpers, arbitrage robots</td>
+            <td><span class="badge badge--pass">Yes</span></td>
+          </tr>
+          <tr>
+            <td><strong>C# / S# + Wealth-Lab</strong></td>
+            <td><span class="badge badge--pass">>1M events/sec</span></td>
+            <td>High</td>
+            <td>Multi-core HFT, multi-exchange, professional systems</td>
+            <td><span class="badge badge--pass">Yes</span></td>
+          </tr>
+          <tr>
+            <td><strong>MetaStock / Omega</strong></td>
+            <td><span class="badge badge--warn">Moderate</span></td>
+            <td>Medium</td>
+            <td>Strategy backtesting, technical analysis, simple robots</td>
+            <td><span class="badge badge--fail">No</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p style="margin-top: 12px; font-size: 13px; color: var(--text-soft);">
+    <strong>Selection rationale:</strong> C# / S# (Stock Sharp) + Wealth-Lab was chosen for its native .NET performance, multi-core processing, emulation >1 million events/second, When-Do rule model, direct access to both Russian and international exchanges via Plaza II, and ability to run hundreds of concurrent algorithms.
+  </p>
+</section>
+
+<!-- ==================== FURTHER RESEARCH ==================== -->
+<section class="page anim-fade" style="margin-bottom: 48px;">
+  <div class="section-label">Future Directions</div>
+  <h2 class="section-title">Suggestions for Further Research</h2>
+  <div class="grid-2">
+    <div class="ve-card ve-card--elevated">
+      <div class="ve-card__label">Multi-Algorithm Paradigm</div>
+      <p style="font-size: 14px; color: var(--text-dim); line-height: 1.7;">
+        This thesis used a mono-algorithm approach. Compare performance of single-strategy vs. multi-strategy automated systems. How do parallel strategies interact on the same portfolio?
+      </p>
+    </div>
+    <div class="ve-card ve-card--elevated">
+      <div class="ve-card__label">Strategy Portfolios</div>
+      <p style="font-size: 14px; color: var(--text-dim); line-height: 1.7;">
+        Instead of a portfolio of stocks, create a portfolio of strategies — trade the same instrument with multiple complementary strategies simultaneously.
+      </p>
+    </div>
+    <div class="ve-card ve-card--elevated">
+      <div class="ve-card__label">Strategy Evaluation</div>
+      <p style="font-size: 14px; color: var(--text-dim); line-height: 1.7;">
+        Develop new dimensions for evaluating strategy performance beyond Sharpe ratio and recovery factor. How to measure strategy vitality over changing market regimes?
+      </p>
+    </div>
+    <div class="ve-card ve-card--elevated">
+      <div class="ve-card__label">Automated Inefficiency Detection</div>
+      <p style="font-size: 14px; color: var(--text-dim); line-height: 1.7;">
+        If markets are increasingly inefficient (Haugen 1995; Rosenberg &amp; Reid 1998), can we automate the discovery of new market inefficiencies from real-time data? Strategy-to-generate-strategies.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="page-footer">
+  <div class="page">
+    Master's Thesis · Kharkiv National University of Economics &amp; Technikum Wien · 2014<br>
+    <span style="color: var(--text-soft);">Oleksandr Muzychenko — Automated Trading Systems &amp; ARP-Breakout Strategy based on Daily Volatility Filter</span>
+  </div>
+</footer>
+
+<!-- ==================== MERMAID ==================== -->
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    look: 'classic',
+    themeVariables: {
+      primaryColor: isDark ? '#1e3a5f' : '#e8e3d3',
+      primaryBorderColor: isDark ? '#e2c06e' : '#b8860b',
+      primaryTextColor: isDark ? '#e2e8f0' : '#1e293b',
+      secondaryColor: isDark ? '#1a2332' : '#f2efe8',
+      secondaryBorderColor: isDark ? '#64748b' : '#94a3b8',
+      secondaryTextColor: isDark ? '#94a3b8' : '#475569',
+      tertiaryColor: isDark ? '#0f1419' : '#f7f5f0',
+      tertiaryBorderColor: isDark ? '#334155' : '#cbd5e1',
+      tertiaryTextColor: isDark ? '#94a3b8' : '#64748b',
+      lineColor: isDark ? '#475569' : '#94a3b8',
+      fontSize: '16px',
+      fontFamily: 'var(--font-body)',
+      noteBkgColor: isDark ? '#1a2332' : '#fefce8',
+      noteTextColor: isDark ? '#94a3b8' : '#475569',
+      noteBorderColor: isDark ? '#e2c06e' : '#b8860b',
+    }
+  });
+</script>
+
+<!-- ==================== ZOOM CONTROLS ==================== -->
+<script>
+  // Architecture diagram zoom
+  let archZoom = 100;
+  const archCanvas = document.getElementById('arch-diagram');
+
+  function applyArchZoom() {
+    if (archCanvas) {
+      const svg = archCanvas.querySelector('svg');
+      if (svg) {
+        svg.style.transform = `scale(${archZoom / 100})`;
+        svg.style.transformOrigin = 'top center';
+      }
+    }
+    document.getElementById('zoom-level').textContent = archZoom + '%';
+  }
+
+  document.getElementById('zoom-in').addEventListener('click', () => {
+    archZoom = Math.min(archZoom + 10, 300);
+    applyArchZoom();
+  });
+  document.getElementById('zoom-out').addEventListener('click', () => {
+    archZoom = Math.max(archZoom - 10, 30);
+    applyArchZoom();
+  });
+  document.getElementById('zoom-reset').addEventListener('click', () => {
+    archZoom = 100;
+    applyArchZoom();
+  });
+  document.getElementById('zoom-expand').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const svg = archCanvas?.querySelector('svg');
+    if (svg) {
+      const serializer = new XMLSerializer();
+      const svgData = serializer.serializeToString(svg);
+      const win = window.open('');
+      win.document.write(`<!DOCTYPE html><html><head><title>ATS Architecture Diagram</title><style>
+        body { margin:0; background:${isDark ? '#0f1419' : '#f7f5f0'}; display:flex; justify-content:center; align-items:flex-start; padding:40px; min-height:100vh; }
+        svg { max-width:100%; height:auto; }
+      </style></head><body>${svgData}</body></html>`);
+    }
+  });
+
+  // Flowchart zoom
+  let flowZoom = 100;
+  window.zoomDiagram = function(id, delta, reset) {
+    const canvas = document.getElementById(id + '-diagram');
+    if (reset) { flowZoom = 100; }
+    else { flowZoom = Math.min(Math.max(flowZoom + delta, 30), 300); }
+    const svg = canvas?.querySelector('svg');
+    if (svg) {
+      svg.style.transform = `scale(${flowZoom / 100})`;
+      svg.style.transformOrigin = 'top center';
+    }
+    const levelEl = document.getElementById(id + '-level');
+    if (levelEl) levelEl.textContent = flowZoom + '%';
+  };
+
+  window.openMermaidInNewTab = function(id) {
+    const canvas = document.getElementById(id);
+    const svg = canvas?.querySelector('svg');
+    if (svg) {
+      const serializer = new XMLSerializer();
+      const svgData = serializer.serializeToString(svg);
+      const win = window.open('');
+      win.document.write(`<!DOCTYPE html><html><head><title>Strategy Flow Diagram</title><style>
+        body { margin:0; background:${isDark ? '#0f1419' : '#f7f5f0'}; display:flex; justify-content:center; align-items:flex-start; padding:40px; min-height:100vh; }
+        svg { max-width:100%; height:auto; }
+      </style></head><body>${svgData}</body></html>`);
+    }
+  };
+
+  // Initialize architecture zoom on Mermaid render
+  setTimeout(() => applyArchZoom(), 500);
+  setTimeout(() => zoomDiagram('flow', 0, true), 500);
+</script>
+
+</body>
+</html>

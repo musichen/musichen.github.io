@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL 3D Cube</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+        #instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            padding-top: 30px; /* Extra space for close button */
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            max-width: 300px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: white;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            font-weight: bold;
+        }
+        .close-btn:hover {
+            color: #ff6b6b;
+        }
+        .keyboard-controls, .touch-controls {
+            margin-bottom: 10px;
+        }
+        h3 {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        #show-instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            display: none; /* Hidden by default */
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        #show-instructions:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            #instructions, #show-instructions {
+                bottom: 10px;
+                left: 10px;
+            }
+            #instructions {
+                max-width: 250px;
+                font-size: 14px;
+            }
+            h3 {
+                font-size: 14px;
+            }
+        }
+        @media (max-height: 500px) {
+            #instructions {
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="webgl-canvas"></canvas>
+    
+    <div id="instructions">
+        <button class="close-btn" id="close-instructions">✕</button>
+        <h3>Keyboard Controls:</h3>
+        <div class="keyboard-controls">
+            <p>Arrow keys: Rotate cube X/Y axes</p>
+            <p>J/L: Spin cube counter-clockwise/clockwise (Z axis)</p>
+            <p>W/S: Move cube up/down</p>
+            <p>A/D: Move cube left/right</p>
+            <p>I/K: Move cube forward/backward (Z axis)</p>
+        </div>
+        
+        <h3>Touch Controls (Mobile):</h3>
+        <div class="touch-controls">
+            <p>Swipe left/right: Rotate left/right</p>
+            <p>Swipe up/down: Rotate up/down</p>
+            <p>Pinch in (expand): Move cube towards viewer</p>
+            <p>Pinch out (contract): Move cube away from viewer</p>
+        </div>
+        
+        <h3>Face Colors & Letters:</h3>
+        <p>Red (A), Orange (B), Yellow (C), Green (D), Blue (E), Purple (F)</p>
+    </div>
+    
+    <button id="show-instructions">Click to open instructions</button>
+    
+    <script src="webgl.js"></script>
+    
+    <script>
+        // Instructions panel toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const instructionsPanel = document.getElementById('instructions');
+            const showInstructionsBtn = document.getElementById('show-instructions');
+            const closeInstructionsBtn = document.getElementById('close-instructions');
+            
+            // Close instructions panel
+            closeInstructionsBtn.addEventListener('click', function() {
+                instructionsPanel.style.display = 'none';
+                showInstructionsBtn.style.display = 'block';
+            });
+            
+            // Show instructions panel
+            showInstructionsBtn.addEventListener('click', function() {
+                instructionsPanel.style.display = 'block';
+                showInstructionsBtn.style.display = 'none';
+            });
+            
+            // Handle keyboard shortcut to toggle instructions (optional)
+            document.addEventListener('keydown', function(e) {
+                // Press 'H' key to toggle instructions
+                if (e.key === 'h' || e.key === 'H') {
+                    if (instructionsPanel.style.display === 'none') {
+                        instructionsPanel.style.display = 'block';
+                        showInstructionsBtn.style.display = 'none';
+                    } else {
+                        instructionsPanel.style.display = 'none';
+                        showInstructionsBtn.style.display = 'block';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

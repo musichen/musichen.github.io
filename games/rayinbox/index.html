@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ray Reflection in Box Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .form-container {
+            display: inline-block;
+            text-align: left;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group h3 {
+            margin-bottom: 5px;
+            font-size: 1.1em;
+            color: #333;
+        }
+        .form-group label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+        .form-group input {
+            padding: 5px;
+            width: 200px;
+        }
+        .buttons {
+            margin-top: 10px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #canvasContainer {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        canvas {
+            border: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ray Reflection Simulation</h1>
+
+    <div class="form-container">
+        <form id="simulationForm">
+            <!-- 1. BOX SIZE -->
+            <div class="form-group">
+                <h3>1) BOX SIZE</h3>
+                <label for="boxWidth">Width (px):</label>
+                <input type="number" id="boxWidth" name="boxWidth" value="1000" min="100" required><br><br>
+                <label for="boxHeight">Height (px):</label>
+                <input type="number" id="boxHeight" name="boxHeight" value="2000" min="100" required>
+            </div>
+
+            <!-- 2. Choose Ray Start Coordinate -->
+            <div class="form-group">
+                <h3>2) Choose Ray Start Coordinate</h3>
+                <label for="startX">X:</label>
+                <input type="number" id="startX" name="startX" value="177" min="0" required><br><br>
+                <label for="startY">Y:</label>
+                <input type="number" id="startY" name="startY" value="1050" min="0" required>
+            </div>
+
+            <!-- 3. Choose Ray Travel Starting Angle in Degrees -->
+            <div class="form-group">
+                <h3>3) Choose Ray Travel Starting Angle (Degrees)</h3>
+                <label for="angle">Angle (°):</label>
+                <input type="number" id="angle" name="angle" value="169" min="0" max="360" required>
+            </div>
+
+            <!-- 4. Travel Speed -->
+            <div class="form-group">
+                <h3>4) Travel Speed</h3>
+                <label for="speed">Speed (px/ms):</label>
+                <input type="number" id="speed" name="speed" value="0.1" step="0.01" min="0.01" required>
+            </div>
+
+            <!-- Buttons -->
+            <div class="buttons">
+                <button type="button" id="startButton">Start</button>
+                <button type="button" id="stopButton">Stop</button>
+                <button type="button" id="clearButton">Clear</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Canvas Container -->
+    <div id="canvasContainer">
+        <canvas id="simulationCanvas" width="1000" height="2000"></canvas>
+    </div>
+
+    <script>
+        // Get DOM Elements
+        const form = document.getElementById('simulationForm');
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const clearButton = document.getElementById('clearButton');
+        const canvas = document.getElementById('simulationCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Simulation Variables
+        let boxWidth = 1000;
+        let boxHeight = 2000;
+        let startX = 177;
+        let startY = 1050;
+        let angle = 169;
+        let speed = 0.1; // pixels per ms
+        let animationId;
+        let lastTimestamp;
+        let ray = {
+            x: startX,
+            y: startY,
+            angle: angle,
+            dx: 0,
+            dy: 0
+        };
+        let path = [];
+
+        // Initialize Canvas
+        function initializeCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw Box
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(0, 0, boxWidth, boxHeight);
+            // Draw Starting Point
+            ctx.fillStyle = 'green';
+            ctx.beginPath();
+            ctx.arc(ray.x, ray.y, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            // Reset Path
+            path = [];
+            path.push({x: ray.x, y: ray.y});
+        }
+
+        // Validate Inputs
+        function validateInputs() {
+            boxWidth = parseInt(document.getElementById('boxWidth').value);
+            boxHeight = parseInt(document.getElementById('boxHeight').value);
+            startX = parseInt(document.getElementById('startX').value);
+            startY = parseInt(document.getElementById('startY').value);
+            angle = parseFloat(document.getElementById('angle').value);
+            speed = parseFloat(document.getElementById('speed').value);
+
+            // Validate Box Size
+            if (boxWidth <= 0 || boxHeight <= 0) {
+                alert("Box width and height must be positive numbers.");
+                return false;
+            }
+
+            // Resize Canvas
+            canvas.width = boxWidth;
+            canvas.height = boxHeight;
+
+            // Validate Starting Coordinates
+            if (startX < 0 || startX > boxWidth || startY < 0 || startY > boxHeight) {
+                alert(`Non-existent coordinate chosen. Please choose X within [0, ${boxWidth}] and Y within [0, ${boxHeight}].`);
+                return false;
+            }
+
+            // Validate Angle
+            if (angle < 0 || angle >= 360) {
+                alert("Angle must be between 0 (inclusive) and 360 (exclusive) degrees.");
+                return false;
+            }
+
+            // Validate Speed
+            if (speed <= 0) {
+                alert("Speed must be a positive number.");
+                return false;
+            }
+
+            return true;
+        }
+
+        // Convert Degrees to Radians
+        function degToRad(degrees) {
+            return degrees * (Math.PI / 180);
+        }
+
+        // Update Ray Direction
+        function updateRayDirection() {
+            const rad = degToRad(ray.angle);
+            ray.dx = Math.cos(rad) * speed;
+            ray.dy = -Math.sin(rad) * speed; // Negative because canvas Y-axis is downwards
+        }
+
+        // Draw Path
+        function drawPath(newX, newY) {
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            const lastPoint = path[path.length - 1];
+            ctx.moveTo(lastPoint.x, lastPoint.y);
+            ctx.lineTo(newX, newY);
+            ctx.stroke();
+            path.push({x: newX, y: newY});
+        }
+
+        // Animation Loop
+        function animate(timestamp) {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            const delta = timestamp - lastTimestamp;
+            lastTimestamp = timestamp;
+
+            // Calculate movement based on speed and time elapsed
+            const moveX = ray.dx * delta;
+            const moveY = ray.dy * delta;
+
+            let newX = ray.x + moveX;
+            let newY = ray.y + moveY;
+
+            let reflected = false;
+
+            // Check for collision with vertical walls
+            if (newX <= 0) {
+                newX = -newX;
+                ray.angle = 180 - ray.angle;
+                reflected = true;
+            } else if (newX >= boxWidth) {
+                newX = 2 * boxWidth - newX;
+                ray.angle = 180 - ray.angle;
+                reflected = true;
+            }
+
+            // Check for collision with horizontal walls
+            if (newY <= 0) {
+                newY = -newY;
+                ray.angle = -ray.angle;
+                reflected = true;
+            } else if (newY >= boxHeight) {
+                newY = 2 * boxHeight - newY;
+                ray.angle = -ray.angle;
+                reflected = true;
+            }
+
+            // Normalize angle
+            ray.angle = (ray.angle + 360) % 360;
+
+            if (reflected) {
+                updateRayDirection();
+            }
+
+            // Draw the path
+            drawPath(newX, newY);
+
+            // Update ray position
+            ray.x = newX;
+            ray.y = newY;
+
+            // Continue the animation
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Start Simulation
+        function startSimulation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+
+            if (!validateInputs()) {
+                return;
+            }
+
+            // Initialize Ray
+            ray.x = startX;
+            ray.y = startY;
+            ray.angle = angle;
+            updateRayDirection();
+
+            // Initialize Canvas
+            initializeCanvas();
+
+            // Reset Timestamp
+            lastTimestamp = null;
+
+            // Start Animation
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Stop Simulation
+        function stopSimulation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        }
+
+        // Clear Canvas
+        function clearCanvas() {
+            stopSimulation();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Event Listeners
+        startButton.addEventListener('click', startSimulation);
+        stopButton.addEventListener('click', stopSimulation);
+        clearButton.addEventListener('click', clearCanvas);
+
+        // Initial Setup
+        window.onload = () => {
+            // Set canvas size based on initial form values
+            boxWidth = parseInt(document.getElementById('boxWidth').value);
+            boxHeight = parseInt(document.getElementById('boxHeight').value);
+            canvas.width = boxWidth;
+            canvas.height = boxHeight;
+            initializeCanvas();
+        };
+    </script>
+
+
+
+<h1>Theoretical background of this simulation</h1>
+
+<pre>
+
+    My simulation aims to visualize the trajectory of a ray (or light beam) traveling within a rectangular box, reflecting off the walls according to the classical law of reflection (angle of incidence equals angle of reflection). The key objective is to observe whether, over an infinite period, the ray's path becomes periodic—returning to its starting point and repeating its pattern—or if it exhibits more complex, non-repeating behavior.
+
+    Mathematical Background: Theoretical Foundations
+  
+  The study of ray trajectories in bounded domains, such as a rectangular box, falls under the branch of mathematics known as  dynamical systems , and more specifically,  mathematical billiards . Here are some foundational concepts, theorems, and works related to my simulation:
+  
+  1.  Mathematical Billiards: 
+     -  Definition:  Mathematical billiards involve studying the motion of a point particle (the "billiard ball") within a domain where it moves in straight lines and reflects off the boundary according to the law of reflection.
+     -  Relevance:  My simulation models a billiard system where the rectangle is the billiard table, and the ray represents the billiard ball's trajectory.
+  
+  2.  Periodic and Non-Periodic Orbits: 
+     -  Periodic Orbit:  A path that eventually repeats itself after a finite number of reflections.
+     -  Non-Periodic (Dense) Orbit:  A path that never exactly repeats but densely fills a region of the space.
+     -  Rational vs. Irrational Slopes: 
+       -  Rational Slope:  If the angle of the ray leads to a slope that is a rational multiple relative to the sides of the rectangle, the orbit is typically periodic.
+       -  Irrational Slope:  Leads to non-periodic or dense orbits where the path never exactly repeats.
+  
+  3.  Theorem: Periodicity in Rational Billiards 
+     -  Statement:  In a rectangular billiard table, if the ratio of the sides is rational and the initial angle leads to a rational slope, the billiard path is periodic.
+     -  Implication:  Under certain conditions (rational ratios and slopes), the ray will repeat its path and return to the starting point after a finite number of reflections.
+  
+  4.  Ergodic Theory: 
+     -  Definition:  Studies the statistical behavior of dynamical systems under repeated iterations.
+     -  Relevance:  For billiard systems with irrational parameters, ergodic theory explores how the ray's path distributes over the space, often showing dense and non-repeating trajectories.
+  
+  5.  Notable Works and Mathematicians: 
+     -  Leonhard Euler:  Early studies on billiard problems.
+     -  Marcel Berger:  Authored "A Panoramic View of Billiards," providing comprehensive coverage of mathematical billiards.
+     -  Yuri A. Kifer and Yakov G. Sinai:  Contributed significantly to the understanding of dynamical systems and ergodic theory.
+     -  Leonid A. Bunimovich:  Known for work on chaotic billiards and ergodic theory.
+  
+    Relevant Articles and Resources
+  
+  1.  "Mathematical Billiards"  - A comprehensive overview can be found in various mathematical journals and textbooks focusing on dynamical systems.
+     
+  2.  "A Panoramic View of Billiards" by Marcel Berger: 
+     -  Description:  This work provides an extensive survey of billiard dynamics, including periodic orbits and ergodic properties.
+     -  Link:  https://www.springer.com/gp/book/9780387986936   
+  
+  3.  Research Papers by Yakov G. Sinai: 
+     -  Description:  Sinai made significant contributions to the field of chaotic billiards and ergodic theory.
+     -  Example Paper:  "A Billiard Problem with Singularities" explores the chaotic nature of certain billiard systems.
+     -  Access:  Search academic databases like https://scholar.google.com/ for specific papers.
+  
+  4.  "Dynamical Systems and Ergodic Theory" by Mark Pollicott and Richard Sharp: 
+     -  Description:  Offers insights into the behavior of dynamical systems, including billiards.
+     -  Link:  https://www.cambridge.org/core/books/dynamical-systems-and-ergodic-theory/6E4E6E7B437C1AA3F6A1A8F4A45D2C0F
+  
+    Answer to My Central Question
+  
+
+
+   Will the ray, after an infinite amount of travel time, repeat its pattern and reach the starting point?
+  
+  The answer depends on specific conditions related to the geometry of the box and the initial angle of the ray:
+  
+  1.  Rational Ratios and Slopes: 
+     -  Box Dimensions:  If the ratio of the box's width to height is a rational number (e.g., 1000px x 2000px, which simplifies to a 1:2 ratio).
+     -  Initial Angle:  If the angle of the ray leads to a slope that is rational relative to the box's sides.
+     -  Outcome:  The ray will follow a  periodic orbit , meaning it will eventually return to its starting point and repeat its trajectory indefinitely.
+  
+  2.  Irrational Slopes: 
+     -  Initial Angle:  If the slope resulting from the initial angle is irrational relative to the box's sides.
+     -  Outcome:  The ray will  never exactly repeat  its path. Instead, it will produce a  dense orbit , filling the available space without ever returning precisely to the starting point.
+  
+  3.  Mixed Conditions: 
+     -  Box Ratios and Slopes:  If the box dimensions and/or the slope combine rational and irrational properties, the behavior can be more complex, potentially leading to quasi-periodic or non-repeating patterns.
+  
+  4.  Infinite Time Consideration: 
+     -  Practical Implications:  While theoretically, with infinite time, periodic orbits will repeat indefinitely, dense orbits in irrational scenarios will never form exact loops, though they come arbitrarily close to any point in the space, including the starting point.
+  
+    Practical Implications for My Simulation
+  
+  Given my initial parameters:
+  
+  -  Box Size:  1000px (width) x 2000px (height) → Ratio simplifies to 1:2 (rational).
+  -  Starting Coordinates:  [177, 1050] (assuming these are within the box boundaries).
+  -  Starting Angle:  169 degrees.
+  -  Travel Speed:  0.1 px/ms.
+  
+   Analysis: 
+  
+  1.  Box Ratio:  1:2 is a rational ratio.
+  2.  Slope Determination: 
+     -  Slope (m):  Determined by the angle. For 169 degrees:
+       - \( m = \tan(169^\circ) \approx \tan(-11^\circ) \approx -0.194 \) (since tan is periodic every 180 degrees).
+       - This slope is approximately -0.194, which is a rational number if expressed as a fraction, but in practice, it's an irrational approximation.
+  
+   Conclusion: 
+  
+  -  Given the Rational Box Ratio and Approximately Rational Slope: 
+    -  Expected Behavior:  The ray is likely to exhibit  periodic behavior , returning to its starting point and repeating its path after a finite number of reflections.
+    
+  -  However, Due to Practical Limitations: 
+    -  Floating-Point Precision:  In computational simulations, floating-point arithmetic may introduce minor inaccuracies, potentially preventing perfect periodicity.
+    -  Infinite Time:  In reality, infinite time isn't achievable, so the simulation would need to rely on approximations over extended periods.
+  
+    Further Exploration
+  
+  To deepen my understanding and extend the simulation:
+  
+  1.  Experiment with Angles: 
+     -  Rational vs. Irrational Angles:  Try angles that lead to rational slopes (e.g., multiples of 45 degrees) versus angles that result in irrational slopes to observe the differences in behavior.
+  
+  2.  Change Box Ratios: 
+     -  Non-Rational Ratios:  Alter the box dimensions to non-rational ratios (e.g., 1000px x 1999px) and observe how this affects the ray's trajectory.
+  
+  3.  Advanced Features: 
+     -  Trail Coloring:  Different colors for different segments of the path can help visualize patterns.
+     -  Intersection Counting:  Track the number of times the ray intersects with each wall to analyze periodicity.
+     -  Speed Variations:  Allow dynamic changes in speed to study their impact on the trajectory.
+  
+    Final Thoughts
+  
+  This simulation is just educational tool for demonstrating fundamental concepts in dynamical systems and mathematical billiards. 
+  By tweaking parameters and observing outcomes, students can gain intuitive insights into how geometric and algebraic properties influence motion and periodicity. 
+  Incorporating theoretical explanations alongside the simulation can further enhance the learning experience.
+  
+  
+</pre>
+
+</body>
+</html>

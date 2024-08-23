@@ -1,624 +1,627 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<html class="not-ie" lang="en">
-<!--<![endif]-->
-<head>
-<meta charset="utf-8">
-<meta name="description" content="description" />
-<meta name="keywords" content="keywords"/>
-<meta name="author" content="BRKOR" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<title>Alexander Musichen</title>
+<!--[if lt IE 7 ]>
+<html class="ie ie6" lang="en">
+   <![endif]-->
+   <!--[if IE 7 ]>
+   <html class="ie ie7" lang="en">
+      <![endif]-->
+      <!--[if IE 8 ]>
+      <html class="ie ie8" lang="en">
+         <![endif]-->
+         <!--[if (gte IE 9)|!(IE)]><!-->
+         <html class="not-ie" lang="en">
+            <!--<![endif]-->
+            <head>
 
 
-<!-- google web font-->
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700' rel='stylesheet' type='text/css'>
+               <!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://amuzychenko.com/">
+<meta property="og:title" content="Alexander Muzychenko - Fullstack Developer">
+<meta property="og:description" content="Full Stack Developer with expertise in Node.js, React, Vue, Angular and more">
+<meta property="og:image" content="https://amuzychenko.com/img/face.jpg">
 
-<!-- style sheets-->
- <link rel="stylesheet" media="all" href="./css/bootstrap.css" type="text/css"/>
- <link rel="stylesheet" media="all" href="./css/custom.css" type="text/css"/>
-
-<!-- main jquery libraries / others are at the bottom-->
- <script src="./js/jquery.min.js" type="text/javascript"></script>
- <script src="./js/modernizr.js" type="text/javascript"></script>
- 
-            <!--  google analytics -->
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-57026657-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
+<!-- Twitter / X  -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://amuzychenko.com/">
+<meta name="twitter:title" content="Alexander Muzychenko - Fullstack  Developer">
+<meta name="twitter:description" content="Full Stack Developer with expertise in Node.js, React, Vue, Angular and more">
+<meta name="twitter:image" content="https://amuzychenko.com/img/face.jpg">
 
 
-<meta name='yandex-verification' content='60d09f064c27c94a' />
+               <meta charset="utf-8">
+               <meta name="description" content="Alexander Muzychenko - Full Stack  Developer specializing in Node.js, React, NextJS, Vue, and Angular" />
+               <meta name="keywords" content="fullstack developer, javascript developer, node.js, react.js, next.js, vue, angular, web development, vienna"/>
+               <meta name="author" content="BRKOR" />
+               <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+               <title>Oleksandr Muzychenko</title>
+               <!-- google web font-->
+               <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700' rel='stylesheet' type='text/css'>
+               <!-- style sheets-->
+               <link rel="stylesheet" media="all" href="./css/bootstrap.css" type="text/css"/>
+               <link rel="stylesheet" media="all" href="./css/custom.css" type="text/css"/>
+               <!-- main jquery libraries / others are at the bottom-->
+               <script src="./js/jquery.min.js" type="text/javascript"></script>
+               <script src="./js/modernizr.js" type="text/javascript"></script>
+               <!--  google analytics -->
+               <script>
+                  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-</head> 
-                     <!-- BODY -->
-<body>
+                  ga('create', 'UA-57026657-1', 'auto');
+                  ga('send', 'pageview');
 
-<!-- Settings -->
-<div class="settings">
- <span class="glyphicon glyphicon-cog"></span>
- <a class="btn active top-white">White theme</a>
- <a class="btn top-dark">Dark theme</a>
-</div>
-<!-- end Settings -->
-
-<!-- Top icons -->
-<a class="top-menu hidden-xs hidden-sm" data-toggle="tooltip" data-placement="top" title="Menu toggle"><span class="glyphicon glyphicon-th-list"></span></a>
-
-<a href="cv/cv_en.pdf" target="_blank" class="top-download-resume hidden-xs hidden-sm" data-toggle="tooltip" data-placement="top" title="Download resume"><span class="glyphicon glyphicon-cloud-download"></span></a>
-<a class="top-contact hidden-xs hidden-sm" data-toggle="tooltip" data-placement="top" title="Contact me"><span class="glyphicon glyphicon-send"></span></a>
-<!-- end Top icons -->
-
-<!--Language Switcher --> 
-<div id="russian" align="right" style="margin-right:10%">
-<a href="ru.html" style="text-decoration:none" title="Русский"><img  src="img/langs/ru.png" height="40" width="40" style="float:right;"/></a>
- </div>
-<div id="english" align="right" >
-<a href="index.html" style="text-decoration:none" title="English"><img  src="img/langs/eng.png" height="40" width="40" style="float:right;"/></a>
- </div>
- <div  id="german" align="right"  > 
-<a href="de.html" style="text-decoration:none" title="Deutsch"><img  src="img/langs/de.png" height="40" width="40" style="float:right"/></a>
-</div>
-
-<!-- end    Language Switcher -->
-
-
-<!-- Navigation -->
-<nav id="spy" class="spy hidden-sm hidden-xs">
- <ul>
- <li class="active"><a href="#profile">Profile</a></li>
- <li><a href="#work-experience">Work experience</a></li>
- <li><a href="#education">Education</a></li>
- <li><a href="#professional-skills">Skills</a></li>
- <li><a href="#interests">Interests</a></li>
- <li><a href="#portfolio">Portfolio</a></li>
- <li><a href="#contact">Contact</a></li>
- </ul>
-</nav>
-<!-- end Navigation -->
- 
-<!-- Navigation for small devices -->
-<nav id="mini-nav" class="spy visible-sm visible-xs">
- <ul>
- <li class="dropdown">
- <a class="dropdown-toggle" data-toggle="dropdown">Menu</a>
- <ul class="dropdown-menu">
- <li class="active"><a href="#profile">Profile</a></li>
- <li><a href="#work-experience">Work experience</a></li>
- <li><a href="#education">Education</a></li>
- <li><a href="#professional-skills">Skills</a></li>
- <li><a href="#interests">Interests</a></li>
- <li><a href="#portfolio">Portfolio</a></li>
- <li><a href="#contact">Contact</a></li>
- </ul>
- </li>
- </ul>
-</nav>
-<!-- end Navigation for small devices -->
- 
-<!-- Header -->
-<header id="header">
- <div class="container">
- <div class="row">
- <div class="col-sm-8 col-sm-offset-2 text-center">
- <img src="img/face.jpg" class="face" alt="">
- <hr class="empty">
-  <p> "There is no one unable, only unwilling... " </p>
- <p style="text-align: center" class="header-name"> Alexander Muzychenko </p>
- <p class="header-title"> MSc, MBA, MA </p>
- <p class="header-title">Web Developer &amp; Designer / Project Manager / Enterpreneur </p>
- <p class="header-subtitle"><b>Hey there, I'm Alex Muzychenko </b> and I'm a Software Engineer, Full Stack Web Developer / Designer and open-minded Enterpreneur. MSc, MBA and MA of both technical and business schools.
-   <br><b> Technical skills: </b>  JavaScript, Node.js, JQuery, React.js, HTML5, CSS3, Java,  Ruby, ML, Racket. DBs(+ ORMs): Mongo, Redis, Postgres, MySQL, SQlite. IDE/Infra: InteliJ, Netbeans, Eclipse, Docker, Vagrant, GIT, Redmine
-    <br> Fast learner of any new areas and technologies, extremely open to grow.
-   <br>Other skills include marketing/sales, organizational, project management, teambuilding, coaching and consulting.  Went to Western Europe to grow professionally acquiring knowledge and skills.
-     <br> <b> Objectives </b>
-   <br>
-  To grow as a software engineer and software project manager.
-   </p>
-
- </div>
- </div>
- 
- </div>
-
-</header>
-<!-- end Header -->
- 
-<!-- Profile -->
-<section id="profile" class="profile activate">
- <div class="container">
- <div class="row">
- <div class="col-sm-7 col-sm-offset-5">
- <ul>
- <li class="title"><span class="glyphicon glyphicon-user"></span>Profile</li>
- <li>
- <span class="note">Full name</span>
- <p><strong> Alexander Muzychenko </strong></p>
- </li>
- <li>
- <span class="note">Born</span>
- <p><strong>19 December 1988</strong></p>
- <p><strong>Svetlograd <br> Russia</strong></p>
- </li>
- 
- <li>
- <span class="note">LinkedIn Profile</span>
- <p><strong><a href="http://www.linkedin.com/in/alexandermusichen">http://www.linkedin.com/in/alexandermusichen</a></strong></p>
- </li>
- </ul>
- </div>
- </div>
- </div>
-</section>
-<!-- end Profile -->
-
-<!-- Work experience -->
-<section id="work-experience" class="work-experience">
- <div class="container">
- <div class="row">
- <div class="col-sm-7 col-sm-offset-5">
- 
- <ul>
- 
- <li class="title"><span class="glyphicon glyphicon-briefcase"></span>Projects & Work experience</li>
-
-     <li>
-         <span class="note">2015 - current</span>
-         <p> <strong>Current project online publishing platform WingPaper.com  </strong> <br> <img src="img/brands/wingpaper.png" width="133" height="38">
-             <br> <strong> <a href="http://www.wingpaper.com"> www.wingpaper.com </a>
-             </strong> </p>
-         <p><strong>Full stack web developer</strong> in Vienna, Austria</p>
-      <p class="description">
-       Working for startup project Wingpaper. Developing the solutions for optimizing the online publishing of PDFs and other documents, creating an entirely new and appealing reader experience and revolutionizing the online advertising market.
-       WingPaper is the only online solution to analyze and monetize existing PDFs and other documents.
-
-       <br> Some tech stack examples used in project:
-       <br>  <b> Ruby, JRuby, Rails </b>
-       <br> <a href="http://www.nodejs.org"> <b> Node.js </b> </a>
-       <br> <a href="https://facebook.github.io/react/"> <b> React.js </b> </a>
-       <br> <a href="http://mqtt.org/"> <b> MQTT, RabitMQ </b> </a>
-       <br> <a href="https://www.elastic.co/"> <b> Elastic Search </b> </a>
-       <br> <a href="http://google.com/"> <b> DBs: Mongo, Redis, PostgreSQL </b> </a>
-       <br> <a href="http://foundation.zurb.com/"> <b> Foundation CSS </b> </a>
-       <br> <a href="http://www.docker.com"> <b> Docker </b> </a>
-       <br> <a href="http://www.google.com"> <b> and else </b> </a>
-      </p>
-
-     </li>
-
- <li>
- <span class="note">October 2012 - December 2014</span>
- <p> <strong>IT Group La April   </strong> <br> <img src="img/brands/LaApril.png" width="133" height="38"> 
-<br> <strong> <a href="http://www.laapril.com"> www.laapril.com </a>
-</strong> </p>
- <p><strong>Web developer/designer and PM</strong> in Vienna, Austria</p>
- <p class="description">Created a team of developers from different IT areas. The team is coordinated remotely, developers are located in in Austria, Ukraine, Russia and India. 
+               </script>
+               <meta name='yandex-verification' content='60d09f064c27c94a' />
+            </head>
+            <!-- BODY -->
+            <body>
+               <!-- Settings -->
+               <div class="settings">
+                  <span class="glyphicon glyphicon-cog"></span>
+                  <a class="btn active top-white">White theme</a>
+                  <a class="btn top-dark">Dark theme</a>
+               </div>
+               <!-- end Settings -->
+               <!-- Top icons -->
+               <a class="top-menu hidden-xs hidden-sm" data-toggle="tooltip" data-placement="top" title="Menu toggle"><span class="glyphicon glyphicon-th-list"></span></a>
+               <a href="https://amuzychenko.com/cv/cv_en.pdf" target="_blank" class="top-download-resume hidden-xs hidden-sm" data-toggle="tooltip" data-placement="top" title="Download resume"><span class="glyphicon glyphicon-cloud-download"></span></a>
+               <a class="top-contact hidden-xs hidden-sm" data-toggle="tooltip" data-placement="top" title="Contact me"><span class="glyphicon glyphicon-send"></span></a>
+               <!-- end Top icons -->
+               <!--Language Switcher -->
+               <!-- <div id="russian" align="right" style="margin-right:10%">
+                  <a href="ru.html" style="text-decoration:none" title="Русский"><img  src="img/langs/ru.png" height="40" width="40" style="float:right;"/></a>
+                   </div>
+                  <div id="english" align="right" >
+                  <a href="index.html" style="text-decoration:none" title="English"><img  src="img/langs/eng.png" height="40" width="40" style="float:right;"/></a>
+                   </div>
+                   <div  id="german" align="right"  >
+                  <a href="de.html" style="text-decoration:none" title="Deutsch"><img  src="img/langs/de.png" height="40" width="40" style="float:right"/></a>
+                  </div>
+                  -->
+               <!-- end    Language Switcher -->
+               <!-- Navigation -->
+               <nav id="spy" class="spy hidden-sm hidden-xs">
+                  <ul>
+                     <li class="active"><a href="#profile">Profile</a></li>
+                     <li><a href="#work-experience">Work experience</a></li>
+                     <li><a href="#education">Education</a></li>
+                     <!-- <li><a href="#professional-skills">Skills</a></li>
+                     <li><a href="#interests">Interests</a></li>
+                     <li><a href="#portfolio">Portfolio</a></li> -->
+                     <li><a href="#contact">Contact</a></li>
+                  </ul>
+               </nav>
+               <!-- end Navigation -->
+               <!-- Navigation for small devices -->
+               <nav id="mini-nav" class="spy visible-sm visible-xs">
+                  <ul>
+                     <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Menu</a>
+                        <ul class="dropdown-menu">
+                           <li class="active"><a href="#profile">Profile</a></li>
+                           <li><a href="#work-experience">Work experience</a></li>
+                           <li><a href="#education">Education</a></li>
+                      <!-- <li><a href="#professional-skills">Skills</a></li>
+                           <li><a href="#interests">Interests</a></li>
+                           <li><a href="#portfolio">Portfolio</a></li> -->
+                           <li><a href="#contact">Contact</a></li>
+                        </ul>
+                     </li>
+                  </ul>
+               </nav>
+               <!-- end Navigation for small devices -->
+               <!-- Header -->
+               <header id="header">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text-center">
+                           <img src="img/face.jpg" class="face" alt="">
+                           <hr class="empty">
+                           <!-- <p> "There is no one unable, only unwilling... " </p> -->
+                           <p style="text-align: center" class="header-name"> Alexander Muzychenko </p>
+                           <p class="header-title"> MSc, MBA, MA </p>
+                           <p class="header-title">Fullstack Javascript Developer (Node/React/Vue/Angular) </p>
+                           <p class="header-subtitle">Hey there, I'm Alex Muzychenko and I'm a Software Engineer, Full Stack Developer.
+                              <br><b> Langs & FrameWorks: </b>
+                              <br> JavaScript (Node.js, React.js (NextJS/Remix/Gatsby), Vue.js, Angular.js, else) HTML5/CSS3, Java (Vert.x, Spark, Spring)  Ruby (Rails, Sinatra), PHP(Laravel,Symfony,etc), Python(PyTorch,Tensorflow,etc.), RAG Apps AI/ML/LLM Llama
+                              <br> <b>DBs(+ ORMs):</b>
+                              <br> Mongo, Dynamo, Redis, Postgres, MySQL, SQlite, OrientDB
+                              <br> <b>IDE/Infra:</b>
+                              <br> Linux, InteliJ, WebStorm, Docker, GIT, Redmine, Linear, Jenkins CI, RabbitMQ Kafka, Kubernetes
+                              <br> Fast learner of any new areas and technologies, always open to expand the stack.
+                              <br>
+                              <br>
+                              <br>
+                              <button onclick="window.open('https://amuzychenko.com/cv/cv_en_2024.pdf')" class="btn btn-success center" style="font-style: normal; background-color: lightblue;">
+                                <span class="glyphicon glyphicon-download"></span>
+                                DOWNLOAD 	&nbsp; 
+                                <script>document.write(new Date().getFullYear())</script> 
+                                	&nbsp; CV in PDF
+                              </button>
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </header>
+               <!-- end Header -->
+               <!-- Profile -->
+               <section id="profile" class="profile activate">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-sm-7 col-sm-offset-5">
+                           <ul>
+                              <li class="title"><span class="glyphicon glyphicon-user"></span>Profile</li>
+                              <li>
+                                 <p><strong> Alexander Muzychenko </strong></p>
+                                 <p><strong> 1190, Vienna, Austria </strong></p>
+                                 <p><strong> +4368120901090 </strong></p>
+                                 <p><strong></strong>
+                                    <a href="https://linkedin.com/in/alexandermusichen"> https://linkedin.com/in/alexandermusichen</a></strong>
+                                 </p>
+                                 <p><strong>
+                                    <a href="mailto:webboxes.developer@gmail.com"> webboxes.developer@gmail.com</a></strong>
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </section>
+               <!-- end Profile -->
+               <!-- Work experience -->
+               <section id="work-experience" class="work-experience">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-sm-7 col-sm-offset-5">
+                           <ul>
+                              <li class="title"><span class="glyphicon glyphicon-briefcase"></span>Projects & Work experience</li>
 
 
- <br> Examples of projects accomplished:
- <br> <a href="http://www.zomato.com"> <b>www.zomato.com </b> </a> 
- <br> <a href="http://www.fylla-bikes.com/modellen/nieuw-fylla-x1/">
- <b> www.fylla-bikes.com </b> </a>
- <br> <a href="http://www.bonanza-pl.com">
- <b> www.bonanza-pl.com </b> </a>
-  <br> <a href="http://www.zukernya-impreza.com">
- <b> www.zukernya-impreza.com </b> </a>
- <br> <a href="http://www.viadent.ru"> <b>www.viadent.ru </b> </a>
- <br> <a href="http://www.eliasmedia.ru"> <b>www.eliasmedia.ru </b> </a> 
- <br> <a href="http://www.delfin-yalta.ru"> <b>www.delfin-yalta.ru </b> </a>
- <br> <a href="http://www.doskao.16mb.com"> <b>www.doskao.16mb.com </b> </a>
-</p>
- 
- </li>
- 
- <li>
- <span class="note">October 2011 - October 2012</span>
- <p><strong>XADO Chemical Group</strong> <br> <img src="img/brands/XADO.png" width="133" height="38"></p>
- <p><strong>Sales representative </strong> in Austria and EU</p>
- <p class="description">	Worked as sales and export manager for Xado Chemical Group Ltd. Facilitating the sales and export of petrochemical products to EU.
- 
-</p>
- </li>
- 
- <li>
-  <span class="note">September 2010 - October 2011</span>
- <p><strong>Agroimpex Ltd.</strong> <br> <img src="img/brands/Agroimpex_Ltd.png" width="105" height="50">
- </p>
- <p><strong>Project manager, commodity trader</strong> in Kharkov, Ukraine</p>
- <p class="description">Export manager and project manager in Agroimpex Ltd. Exporting products from Ukraine and Russia. 
-Significant Contributions: <br>
- - Successfully accomplished export projects (equipment, commodities)<br>
- - Have developed  architecture for internal e-collaboration <br>
- - Have developed  DB and connections with suppliers</p>
- </li>
- 
- <li>
-  <span class="note">February 2011 – April 2011 </span>
- <p><strong>Arabian Rooster Ltd.</strong> <br> <img src="img/brands/Arabian_Rooster_Ltd.png" width="133" height="38">
- </p>
- <p><strong>project manager, commodity trader</strong> in Dubai, U.A.E.</p>
- <p class="description">Worked with Arabian Rooster Ltd. in Dubai during spring 2011 as project and export manager, accomplished export projects of a range of the products such as Chemical  (Mercury, Urea) and Food Commodities (frozen chicken, grains).
-</p>
- </li>
-  
- <li>
-  <span class="note">March 2010 – August 2010</span>
- <p><strong>Dolphin Smart Group</strong>
- <br> <img src="img/brands/SDG.png" width="133" height="38"> </p>
- <p><strong>Prop Trader</strong> in Kharkov, Ukraine</p>
- <p class="description">Working in Dolphin Smart Group, trading as prop trader, developing and testing trading strategies in Stock markets (NYSE, NASDAQ, RTS).
-</p>
- </li>
- 
-  <li>
-  <span class="note">January 2010 – March 2010</span>
- <p><strong>BKS</strong>
-  <br> <img src="img/brands/BKS.png" width="133" height="38">
- </p>
- <p><strong>Internship-trader, Prop Trader</strong> in Moscow, Russia</p>
- <p class="description">Accomplishing a special studying program "Active day trading analytics" of A. Gerchik.
-Accomplishing the practice of day trading in office of "Prospect investment group" in Moscow, then in Tula. Then worked as prop trader.
-</p>
- </li>
- 
- <li>
-  <span class="note">September 2008 – December 2009</span>
- <p><strong>Heelys Ukraine</strong>
-   <br> <img src="img/brands/Heelys.png" width="92" height="38">
- </p>
- <p><strong>Distributor, Manager</strong> in Kharkov, Ukraine</p>
- <p class="description">Running an own business project. Distributor in Eastern Ukraine from US shoe company "Heelys"
-Establishing sales team, training and inspiring the team of like-minded people to promote, sell and deliver Hellys products all over  Ukraine.
-<br> - Have created effective sales team
-<br> - Developed marketing plan, web store, promo videos and materials </p>
- </li>
- 
- </ul>
- 
- </div>
- </div>
- </div>
-</section>
-<!-- end Work experience -->
- 
-<!-- Education -->
-<section id="education" class="education">
- <div class="container">
- <div class="row">
- <div class="col-sm-7 col-sm-offset-5">
- <ul>
- <li class="title"><span class="glyphicon glyphicon-book"></span>Education</li>
- <li>
- <span class="note">February 2012 - April 2014</span>
- <p><strong>MSc in Engineering</strong></p>
- <p><strong>Vienna Technical University of Applied Sciences</strong> in Vienna, Austria </p>
- <p class="description">Obtained Master of Science in Engineering (Business IT / Wirtschaftinformatik). <br>
- Master Thesis research topic: <br>
- "Modern Software Solutions as Facilitators in 
-Decision-Making Processes on Managing Stock 
-Market Portfolios"
-<br> <b>This MT were chosen and published in Germany by 
-<br> German science publishing group "Akademiker Verlag"
-<br> <a href="http://www.akademikerverlag.de" target="_blank" title="Akademiker Verlag GmbH">www.AkademikerVerlag.de</a>  </b>
- </p>
- </li>
- <li>
- <span class="note">February 2011 - February 2012</span>
- <p><strong>MBA</strong></p>
- <p><strong>Simon Kuznets Kharkiv National University of Economics</strong> in Kharkov, Ukraine</p>
- <p class="description"> Studied Master of Business Administration in international double-degree programm between Ukraine and Austria.  </p>
- </li>
- 
- <li>
- <span class="note">September 2010 - February 2012</span>
- <p><strong>Masters Degree</strong></p>
- <p><strong>Simon Kuznets Kharkiv National University of Economics </strong> in Kharkov, Ukraine</p>
- <p class="description"> Accomplishing the programm of studying that specifies in Banking and Stock Market</p>
- </li>
- 
-  <li>
- <span class="note">September 2006 - February 2012</span>
- <p><strong>Bachelors Degree</strong></p>
- <p><strong>Simon Kuznets Kharkiv National University of Economics </strong> in Kharkov, Ukraine</p>
- <p class="description"> Accomplishing the programm of studying that covers general Finance, Economics and Enterpreneurship</p>
- </li>
- 
- </ul>
- </div>
- </div>
- </div>
-</section>
-<!-- end Education -->
- 
-<!-- Professional skills -->
-<section id="professional-skills" class="professional-skills">
- <div class="container">
- <div class="row">
- <div class="col-sm-7 col-sm-offset-5">
- <ul>
- <li class="title"><span class="glyphicon glyphicon-tasks"></span>Professional skills</li>
- <p> <b> Technical </b> </p>
- <li>
- <p>Web Development: HTML / CSS / JS <span class="annotation pull-right">90%</span></p>
- <div class="progress">
- <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
- </div>
- </li>
- <li>
- <p>Programming: OOP, MVC; Java, PHP, ML, Ruby / Ruby on Rails FW, SQL, Python<span class="annotation pull-right">80%</span></p>
- <div class="progress">
- <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
- </div>
- </li>
- <li>
- <p>Software: ERP (SAP, Open ERP), Server administration, Linux, Windows, MS Office<span class="annotation pull-right">70%</span></p>
- <div class="progress">
- <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
- </div>
- </li>
-  <p> <b> Other skills </b> </p>
- 
- 
-     <li>
- <p> Project Management <span class="annotation pull-right">95%</span></p>
- <div class="progress">
- <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
- </div>
- </li>
- 
-    <li>
- <p> Marketing, SEO, SEM, Social Media, PR, Consulting <span class="annotation pull-right">90%</span></p>
- <div class="progress">
- <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
- </div>
- </li>
- 
-  <li>
- <p> Business activities, Import-Export operations and Accounting <span class="annotation pull-right">85%</span></p>
- <div class="progress">
- <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
- </div>
- </li>
- 
-
- 
- </ul>
- </div>
- </div>
- </div>
-</section>
-<!-- end Professional skills -->
- 
-<!-- Personal skills -->
-<section id="personal-skills" class="personal-skills">
- <div class="container">
- <div class="row">
- <div class="col-sm-7 col-sm-offset-5">
- <ul>
- <li class="title"><span class="glyphicon glyphicon-stats"></span>Personal skills</li>
- <li>
- <span class="chart" data-percent="95"><span class="skill">Creativity</span>
- <span class="percent"></span>
- </span>
- <span class="chart" data-percent="90"><span class="skill">Social skills</span>
- <span class="percent"></span>
- </span>
- <span class="chart" data-percent="85"><span class="skill">Leadership</span>
- <span class="percent"></span>
- </span>
-
- </li>
- </ul>
- </div>
- </div>
- </div>
-</section>
-<!-- end Personal skills -->
- 
-<!-- Interests -->
-<section id="interests" class="interests">
- <div class="container">
- <div class="row">
- <div class="col-sm-7 col-sm-offset-5">
- <ul>
- <li class="title"><span class="glyphicon glyphicon-heart-empty"></span>Interests</li>
- <li>
- <p><strong>Books</strong></p>
- <p class="description"> Books about science and applications by such authors as: Richard Dawkins, David Deutsch, Timothy Leary and others.
- Sci-fi books of Sergei Lukyanenko and others.  </p>
- </li>
- <li>
- <p><strong>Arts</strong></p>
- <p class="description"> Music (composing, performing): Guitar, Piano.
- <br> Singing. Songwriting.</p>
- </li>
- <li>
- <p><strong>Sports</strong></p>
- <p class="description"> Athletics, Body Building, Acrobatics, Dancing. <br>
- Martial Arts. 
- </p>
- </li>
- </ul>
- </div>
- </div>
- </div>
-</section>
-<!-- end Interests -->
- 
-<!-- Portfolio -->
-<section id="portfolio" class="portfolio">
- <div class="container">
- <div class="row">
- <div class="col-sm-7 col-sm-offset-5">
- <ul>
- <li class="title"><span class="glyphicon glyphicon-eye-open"></span>Portfolio</li>
-   <p>Github account:  <b><a href="http://www.github.com/musichen/" target="_blank">github.com/musichen </a> </b> </p>
-   <p>  Examples of accomplished Web projects  </p>
- <li class="static">
- <img src="./img/1.jpg" alt="" data-toggle="modal" data-target="#modal1">
- <img src="./img/2.jpg" alt="" data-toggle="modal" data-target="#modal2">
- <img src="./img/3.jpg" alt="" data-toggle="modal" data-target="#modal3">
- <img src="./img/4.jpg" alt="" data-toggle="modal" data-target="#modal4">
- </li>
-   <p>  List of some accomplished Web projects:  </p>
- <br> <a href="http://www.zomato.com" target="_blank"> <b>www.zomato.com </b> </a> 
- <br> <a href="http://www.fylla-bikes.com" target="_blank">
- <b> www.fylla-bikes.com </b> </a>
- <br> <a href="http://www.bonanza-pl.com" target="_blank">
- <b> www.bonanza-pl.com </b> </a>
-  <br> <a href="http://www.zukernya-impreza.com" target="_blank">
- <b> www.zukernya-impreza.com </b> </a>
- <br> <a href="http://www.viadent.ru" target="_blank"> <b>www.viadent.ru </b> </a>
- <br> <a href="http://www.eliasmedia.ru" target="_blank"> <b>www.eliasmedia.ru </b> </a> 
- <br> <a href="http://www.delfin-yalta.ru" target="_blank"> <b>www.delfin-yalta.ru </b> </a>
- <br> <a href="http://www.doskao.16mb.com" target="_blank"> <b>www.doskao.16mb.com </b> </a>
-
- </div>
- </div>
- </div>
-</section>
-<!-- end Portfolio -->
- 
-<!-- Modal - photos in zoom-->
-<div id="modal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
- <div class="modal-dialog">
- <div class="modal-box">
- <img src="./img/1.jpg" alt="">
- </div>
- </div>
-</div>
-<div id="modal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
- <div class="modal-dialog">
- <div class="modal-box">
- <img src="./img/2.jpg" alt="">
- </div>
- </div>
-</div>
-<div id="modal3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal3" aria-hidden="true">
- <div class="modal-dialog">
- <div class="modal-box">
- <img src="./img/3.jpg" alt="">
- </div>
- </div>
-</div>
-<div id="modal4" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal4" aria-hidden="true">
- <div class="modal-dialog">
- <div class="modal-box">
- <img src="./img/4.jpg" alt="">
- </div>
- </div>
-</div>
-<!-- end Modal - photos in zoom-->
- 
-<!-- Contact -->
-<section id="contact" class="contact">
- <div class="container">
- <div class="row">
- <div class="col-sm-7 col-sm-offset-5">
- <ul>
- <li class="title"><span class="glyphicon glyphicon-envelope"></span>Contact</li>
- <li class="static">
- <span class="note">Address</span>
- <p><strong> Lorenz Müller Gasse 1, Vienna</strong></p>
- <p><strong> 1200 Austria</strong></p>
- <span class="note">Mobile (Austria)</span>
- <p><strong> +4368120901090</strong></p>
-<span class="note">Mobile (Russia)</span>
- <p><strong> +79788062730</strong></p>
-<span class="note">Mobile (Ukraine)</span>
- <p><strong> +380631098999</strong></p>
- <span class="note">Skype</span>
- <p><strong>alexander.musichen</strong></p>
- <span class="note">Email</span>
- <p><strong>
-<a href="mailto:alex.musichen@gmail.com"> alex.musichen@gmail.com</a></strong></p>
-<span class="note">Email</span>
- <p><strong>
-<a href="mailto:alex@musichen.ml"> alex@musichen.ml</a></strong></p>
-                   <hr class="empty">
-              
-                      <!--  my EMAIL   FORM goes here  input name= yourname email subject comments  -->
-                        <form action="sendmail.php" method="post">
-                            <div class="form-group input-group">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                <input name="yourname" type="text" class="form-control" id="inputname" placeholder="Enter your name">
-                            </div>
-                            <div class="form-group input-group">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-                                <input name="email" type="email" class="form-control" id="inputemail" placeholder="Enter your email">
-                            </div>
-                            <div class="form-group input-group">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-bold"></span></span>
-                                <input name="subject" type="text" class="form-control" id="inputsubject" placeholder="Enter subject">
-                            </div>
-                            <div class="form-group input-group">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-comment"></span></span>
-                                <textarea name="comments" class="form-control" id="inputmessage" rows="3" placeholder="Enter message here"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-success pull-right"><span class="glyphicon glyphicon-send"></span> Send message</button>
-                        </form>
-                 
-                                <!--    ARROW  NAV  UP goes here    -->
-                    </li>
-                    <li class="title up"><span class="glyphicon glyphicon-arrow-up"></span>Up</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- end Contact -->
-
-<!-- Java Script -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="./js/bootstrap.min.js"></script>
-<script src="./js/bootstrap-progressbar.js"></script>
-<script src="./js/scripts.js"></script>
-<!-- Charts -->
-<script src="./js/spy.js"></script>
-<script src="./js/jquery.easypiechart.js"></script>
-<script src="./js/chart.js"></script>
+                              <li>
+                                 <span class="note">September 2018 - Present </span>
+                                 <p> 
+                                    <strong> <a href="https://web-boxes.com"> WebBoxes</a>
+                                    </strong>
+                                    <br> 
+                                 </p>
+                                 <p><strong>Freelancing Software Engineer/Consultant </strong> in Vienna, Austria</p>
+                                 <p>
+                                    <strong>
+                                       Spearheaded PoC solutions to enhance data security and automate processes in online gaming, improving operations, real-time communication by 25%, optimizing in-game transactions with smart contracts, leveraging Docker and Kubernetes for consistent PoC deployments, implementing server scaling to handle 10K concurrent users, and collaborating with teams to design scalable blockchain solutions aligned with business goals.
+                                    </strong>
+                                 </p>
+                                 <br>
+                              </li>
 
 
+                              <li>
+                                 <span class="note">January 2023 - July 2024 </span>
+                                 <p> 
+                                    <strong>Lylu GmbH
+                                    </strong>
+                                    <br> 
+                                 </p>
+                                 <p><strong>Software Engineer </strong> in Berlin, Germany</p>
+                                 <p>
+                                    <strong>
+                                       Engineered the scalable backend for Lylu Tablet on AWS ECS and Anbox Cloud, led WebRTC integration to ensure smooth cross-device performance with 20% reduced latency, suggested a Webflow solution for efficient marketing changes, and delivered the project 25% under budget while meeting all deadlines
+                                    </strong>
+                                 </p>
+                                 <br>
+                              </li>
 
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-(function (d, w, c) {
-    (w[c] = w[c] || []).push(function() {
-        try {
-            w.yaCounter27171494 = new Ya.Metrika({id:27171494,
-                    webvisor:true,
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true});
-        } catch(e) { }
-    });
+                              <li>
+                                 <span class="note">January 2021 - December 2022 </span>
+                                 <p> 
+                                    <strong>Viewpointsystems GmbH
+                                    </strong>
+                                    <br> 
+                                 </p>
+                                 <p><strong>Software Engineer </strong> in Vienna, Austria</p>
+                                 <p>
+                                    <strong>
+                                       Crafted a React.js WebRTC app for real-time interaction with eye-tracking smart glasses, integrated WebRTC for seamless video communication across multiple devices, collaborated with teams to enhance functionality and responsiveness, and was promoted to Senior Software Engineer for increasing app engagement time by 2x.
+                                    </strong>
+                                 </p>
+                                 <br>
+                                 <li>
+                                    <span class="note">January 2020 - December 2020 </span>
+                                    <p> 
+                                       <strong>Frequentis
+                                       </strong>
+                                       <br> 
+                                    </p>
+                                    <p><strong>Software Engineer </strong> in Vienna, Austria</p>
+                                    <p>
+                                       <strong>
+                                          Engineered a communication hub using WebRTC, PTT, and IP-Telephony, improving efficiency by 7% and reducing latency by 11%, while integrating with 10+ global airlines, contributing to a 5% revenue increase.
+                                       </strong>
+                                    </p>
+                                    <br>
+                                 </li>
+                                 <li>
+                                    <span class="note">January 2018 - January 2020 </span>
+                                    <p> 
+                                       <strong>TRIGO
+                                       </strong>
+                                       <br> 
+                                    </p>
+                                    <p><strong>Full Stack Engineer </strong> in Vienna, Austria</p>
+                                    <p>
+                                       <strong>
+                                          Developed an online platform for Austrian Trade Unions, including multi-vendor systems for organizations like ÖGB and GPA-DJP, and contributed to internal app development for Austrian Broadcasting company ORF.
+                                       </strong>
+                                    </p>
+                                    <br>
+                                 </li>
+                                 <li>
+                                    <span class="note">January 2017 - December 2017 </span>
+                                    <p> 
+                                       <strong>DCODEIT LTD
+                                       </strong>
+                                       <br> 
+                                    </p>
+                                    <p><strong>Full Stack Engineer </strong> in Vienna, Austria</p>
+                                    <p>
+                                       <strong>
+                                          Engineered React.js/Node.js applications for clients, including a banking mobile app, BI web apps, mobile games for a betting platform, and social media aggregator apps integrating various APIs.
+                                       </strong>
+                                    </p>
+                                    <br>
+                                 </li>
+                                 <li>
+                                    <span class="note">January 2015 - January 2017 </span>
+                                    <p> 
+                                       <strong>Wingpaper
+                                       </strong>
+                                       <br> 
+                                    </p>
+                                    <p><strong>Full Stack Engineer </strong> in Vienna, Austria</p>
+                                    <br>
+                                 </li>
+                                 <li>
+                                    <span class="note">January 2012 - December 2014 </span>
+                                    <p> 
+                                       <strong>laapril.com
+                                       </strong>
+                                       <br> 
+                                    </p>
+                                    <p><strong>Software Engineer </strong> in Vienna, Austria</p>
+                                    <br>
+                                 </li>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </section>
+               <!-- end Work experience -->
+               <!-- Education -->
+               <section id="education" class="education">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-sm-7 col-sm-offset-5">
+                           <ul>
+                              <li class="title"><span class="glyphicon glyphicon-book"></span>Education</li>
+                              <li>
+                                 <span class="note">February 2012 - April 2014</span>
+                                 <p><strong>MSc in Engineering</strong></p>
+                                 <p><strong>Vienna Technical University of Applied Sciences</strong> in Vienna, Austria </p>
+                                 <p class="description">Obtained Master of Science in Engineering (Business IT / Wirtschaftinformatik). <br>
+                                    Master Thesis research topic: <br>
+                                    "Machine Learning as facilitator in decision-making processes on managing stock market portfolios [Developing an algorithm and an automated trading bot, testing on real-time market data]"
+                                    <br> <b>This MT were chosen and published in Germany by
+                                    <br> German science publishing group "Akademiker Verlag"
+                                    <br> <a href="http://www.akademikerverlag.de" target="_blank" title="Akademiker Verlag GmbH">www.AkademikerVerlag.de</a>  </b>
+                                    <br> <a href="https://amzn.eu/d/028up4ax" target="_blank" title="Akademiker Verlag GmbH"> Author of Book published by AkademikerVerlag.de book can be purchased from Amazon </a>  </b>
+                                    <br> <a href="https://www.amazon.com/Automated-Adaptive-Reversal-Parametric-Breakout/dp/3639786513/ref=sr_1_1?qid=1672162401&refinements=p_27%3AAlexander+Muzychenko&s=books&sr=1-1&text=Alexander+Muzychenko" target="_blank" title="Amazon Books"> Book on Amazon.com (US) "Alexander Muzychenko - Automated trading with Adaptive Reversal Parametric Breakout Strategy: Stock Market trading with Automated Trading Systems" </a>  </b>
+                                    <br> <a href="https://amzn.eu/d/028up4ax" target="_blank" title="Amazon Books DE"> Book on Amazon.DE "Alexander Muzychenko - Automated trading with Adaptive Reversal Parametric Breakout Strategy: Stock Market trading with Automated Trading Systems" </a>  </b>
 
-    var n = d.getElementsByTagName("script")[0],
-        s = d.createElement("script"),
-        f = function () { n.parentNode.insertBefore(s, n); };
-    s.type = "text/javascript";
-    s.async = true;
-    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+                                    <br> <a href="https://www.buecher.de/shop/englische-buecher/automated-trading-with-adaptive-reversal-parametric-breakout-strategy/muzychenko-alexander/products_products/detail/prod_id/42044795/" target="_blank" title="Amazon Books"> Book on buecher.de "Alexander Muzychenko - Automated trading with Adaptive Reversal Parametric Breakout Strategy: Stock Market trading with Automated Trading Systems" </a>  </b>
+                                 
+                                 </p>
+                              </li>
+                              <li>
+                                 <span class="note">February 2011 - February 2012</span>
+                                 <p><strong>MBA</strong></p>
+                                 <p><strong>Simon Kuznets Kharkiv National University of Economics</strong> in Kharkov, Ukraine</p>
+                                 <p class="description"> Studied Master of Business Administration in international double-degree programm between Ukraine and Austria.  </p>
+                              </li>
+                              <li>
+                                 <span class="note">September 2010 - February 2012</span>
+                                 <p><strong>Masters Degree</strong></p>
+                                 <p><strong>Simon Kuznets Kharkiv National University of Economics </strong> in Kharkov, Ukraine</p>
+                                 <p class="description"> Accomplishing the programm of studying that specifies in Banking and Stock Market</p>
+                              </li>
+                              <li>
+                                 <span class="note">September 2006 - February 2012</span>
+                                 <p><strong>Bachelors Degree</strong></p>
+                                 <p><strong>Simon Kuznets Kharkiv National University of Economics </strong> in Kharkov, Ukraine</p>
+                                 <p class="description"> Accomplishing the programm of studying that covers general Finance, Economics and Enterpreneurship</p>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </section>
+               <!-- end Education -->
+               <!-- Professional skills -->
+               <!--
+               <section id="professional-skills" class="professional-skills">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-sm-7 col-sm-offset-5">
+                           <ul>
+                              <li class="title"><span class="glyphicon glyphicon-tasks"></span>Professional skills</li>
+                              <p> <b> Technical </b> </p>
+                              <li>
+                                 <p>Web Development: HTML / CSS / JS <span class="annotation pull-right">90%</span></p>
+                                 <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                 </div>
+                              </li>
+                              <li>
+                                 <p>Programming: OOP, MVC; Java, PHP, ML, Ruby / Ruby on Rails FW, SQL, Python<span class="annotation pull-right">80%</span></p>
+                                 <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                 </div>
+                              </li>
+                              <li>
+                                 <p>Software: ERP (SAP, Open ERP), Server administration, Linux, Windows, MS Office<span class="annotation pull-right">70%</span></p>
+                                 <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                 </div>
+                              </li>
+                              <p> <b> Other skills </b> </p>
+                              <li>
+                                 <p> Project Management <span class="annotation pull-right">95%</span></p>
+                                 <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
+                                 </div>
+                              </li>
+                              <li>
+                                 <p> Marketing, SEO, SEM, Social Media, PR, Consulting <span class="annotation pull-right">90%</span></p>
+                                 <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                 </div>
+                              </li>
+                              <li>
+                                 <p> Business activities, Import-Export operations and Accounting <span class="annotation pull-right">85%</span></p>
+                                 <div class="progress">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                 </div>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </section>
+             -->
+               <!-- end Professional skills -->
 
-    if (w.opera == "[object Opera]") {
-        d.addEventListener("DOMContentLoaded", f, false);
-    } else { f(); }
-})(document, window, "yandex_metrika_callbacks");
-</script>
-<noscript><div><img src="//mc.yandex.ru/watch/27171494" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
+               <!-- Personal skills -->
+               <!--
+               <section id="personal-skills" class="personal-skills">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-sm-7 col-sm-offset-5">
+                           <ul>
+                              <li class="title"><span class="glyphicon glyphicon-stats"></span>Personal skills</li>
+                              <li>
+                                 <span class="chart" data-percent="95"><span class="skill">Creativity</span>
+                                 <span class="percent"></span>
+                                 </span>
+                                 <span class="chart" data-percent="90"><span class="skill">Social skills</span>
+                                 <span class="percent"></span>
+                                 </span>
+                                 <span class="chart" data-percent="85"><span class="skill">Leadership</span>
+                                 <span class="percent"></span>
+                                 </span>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </section>
+             -->
+               <!-- end Personal skills -->
 
+               <!-- Interests -->
+               <!--
+               <section id="interests" class="interests">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-sm-7 col-sm-offset-5">
+                           <ul>
+                              <li class="title"><span class="glyphicon glyphicon-heart-empty"></span>Interests</li>
+                              <li>
+                                 <p><strong>Books</strong></p>
+                                 <p class="description"> Books about science and applications by such authors as: Richard Dawkins, David Deutsch, Timothy Leary and others.
+                                    Sci-fi books of Sergei Lukyanenko and others.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><strong>Arts</strong></p>
+                                 <p class="description"> Music (composing, performing): Guitar, Piano.
+                                    <br> Singing. Songwriting.
+                                 </p>
+                              </li>
+                              <li>
+                                 <p><strong>Sports</strong></p>
+                                 <p class="description"> Athletics, Body Building, Acrobatics, Dancing. <br>
+                                    Martial Arts.
+                                 </p>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </section>
+             -->
+               <!-- end Interests -->
 
-</body>
+               <!-- Portfolio -->
+               <!--
+               <section id="portfolio" class="portfolio">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-sm-7 col-sm-offset-5">
+                           <ul>
+                           <li class="title"><span class="glyphicon glyphicon-eye-open"></span>Portfolio</li>
+                           <p>Github account:  <b><a href="http://www.github.com/musichen/" target="_blank">github.com/musichen </a> </b> </p>
+                           <p>  Examples of accomplished Web projects  </p>
+                           <li class="static">
+                              <img src="./img/1.jpg" alt="" data-toggle="modal" data-target="#modal1">
+                              <img src="./img/2.jpg" alt="" data-toggle="modal" data-target="#modal2">
+                              <img src="./img/3.jpg" alt="" data-toggle="modal" data-target="#modal3">
+                              <img src="./img/4.jpg" alt="" data-toggle="modal" data-target="#modal4">
+                           </li>
+                           <p>  List of some accomplished Web projects:  </p>
+                           <br> <a href="http://www.zomato.com" target="_blank"> <b>www.zomato.com </b> </a>
+                           <br> <a href="http://www.fylla-bikes.com" target="_blank">
+                           <b> www.fylla-bikes.com </b> </a>
+                           <br> <a href="http://www.bonanza-pl.com" target="_blank">
+                           <b> www.bonanza-pl.com </b> </a>
+                           <br> <a href="http://www.zukernya-impreza.com" target="_blank">
+                           <b> www.zukernya-impreza.com </b> </a>
+                           <br> <a href="http://www.viadent.ru" target="_blank"> <b>www.viadent.ru </b> </a>
+                           <br> <a href="http://www.eliasmedia.ru" target="_blank"> <b>www.eliasmedia.ru </b> </a>
+                           <br> <a href="http://www.delfin-yalta.ru" target="_blank"> <b>www.delfin-yalta.ru </b> </a>
+                           <br> <a href="http://www.doskao.16mb.com" target="_blank"> <b>www.doskao.16mb.com </b> </a>
+                        </div>
+                     </div>
+                  </div>
+               </section>
+             -->
+               <!-- end Portfolio -->
 
-</html>	
+               <!-- Modal - photos in zoom-->
+               <!--
+               <div id="modal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal1" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-box">
+                        <img src="./img/1.jpg" alt="">
+                     </div>
+                  </div>
+               </div>
+               <div id="modal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal2" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-box">
+                        <img src="./img/2.jpg" alt="">
+                     </div>
+                  </div>
+               </div>
+               <div id="modal3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal3" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-box">
+                        <img src="./img/3.jpg" alt="">
+                     </div>
+                  </div>
+               </div>
+               <div id="modal4" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal4" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-box">
+                        <img src="./img/4.jpg" alt="">
+                     </div>
+                  </div>
+               </div>
+             -->
+               <!-- end Modal - photos in zoom-->
+
+               <!-- Contact -->
+               <section id="contact" class="contact">
+                  <div class="container">
+                     <div class="row">
+                        <div class="col-sm-7 col-sm-offset-5">
+                           <ul>
+                              <li class="title"><span class="glyphicon glyphicon-envelope"></span>Please reach me out</li>
+                              <li class="static">
+                                 <!-- <span class="note">Location </span>
+                                 <p><strong> 1190, Vienna, Austria</strong></p>
+                                 <span class="note">Mobile (Austria)</span>
+                                 <p><strong> +4368120901090</strong></p>
+                                 <span class="note">Skype</span>
+                                 <p><strong>live:alex.musichen_1</strong></p>
+                                 <span class="note">Email</span>
+                                 <p><strong>
+                                    <a href="mailto:alex.musichen@gmail.com"> alex.musichen@gmail.com</a></strong>
+                                 </p>
+                                 <span class="note">Github / GitLab / BitBucket</span>
+                                 <p>
+                                   <strong><a href="https://github.com/musichen" style="color: darkgrey" target="_blank"> github.com/musichen</a></strong>
+                                   <br> <strong><a href="https://gitlab.com/musichen" style="color: darkgrey" target="_blank"> gitlab.com/musichen</a></strong>
+                                   <br> <strong><a href="https://bitbucket.org/musichen" style="color: darkgrey" target="_blank"> bitbucket.org/musichen</a></strong>
+                                 </p> -->
+                                 <hr class="empty">
+                                 <!--  my EMAIL   FORM goes here  input name= yourname email subject comments  -->
+                                 <form action="https://formspree.io/f/mqkjrvro" method="POST">
+                                    <div class="form-group input-group">
+                                       <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                       <input name="yourname" type="text" class="form-control" id="inputname" placeholder="Enter your name">
+                                    </div>
+                                    <div class="form-group input-group">
+                                       <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
+                                       <input name="email" type="email" class="form-control" id="inputemail" placeholder="Enter your email">
+                                    </div>
+                                    <div class="form-group input-group">
+                                       <span class="input-group-addon"><span class="glyphicon glyphicon-bold"></span></span>
+                                       <input name="subject" type="text" class="form-control" id="inputsubject" placeholder="Enter subject">
+                                    </div>
+                                    <div class="form-group input-group">
+                                       <span class="input-group-addon"><span class="glyphicon glyphicon-comment"></span></span>
+                                       <textarea name="comments" class="form-control" id="inputmessage" rows="3" placeholder="Enter message here"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-success pull-right"><span class="glyphicon glyphicon-send"></span> Send message</button>
+                                 </form>
+                                 <!--    ARROW  NAV  UP goes here    -->
+                              </li>
+                              <li class="title up"><span class="glyphicon glyphicon-arrow-up"></span>Up</li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </section>
+               <!-- end Contact -->
+               <!-- Java Script -->
+               <!-- Placed at the end of the document so the pages load faster -->
+               <script src="./js/bootstrap.min.js"></script>
+               <script src="./js/bootstrap-progressbar.js"></script>
+               <script src="./js/scripts.js"></script>
+               <!-- Charts -->
+               <script src="./js/spy.js"></script>
+               <script src="./js/jquery.easypiechart.js"></script>
+               <script src="./js/chart.js"></script>
+               <!-- Yandex.Metrika counter -->
+               <script type="text/javascript">
+                  (function (d, w, c) {
+                      (w[c] = w[c] || []).push(function() {
+                          try {
+                              w.yaCounter27171494 = new Ya.Metrika({id:27171494,
+                                      webvisor:true,
+                                      clickmap:true,
+                                      trackLinks:true,
+                                      accurateTrackBounce:true});
+                          } catch(e) { }
+                      });
+
+                      var n = d.getElementsByTagName("script")[0],
+                          s = d.createElement("script"),
+                          f = function () { n.parentNode.insertBefore(s, n); };
+                      s.type = "text/javascript";
+                      s.async = true;
+                      s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+                      if (w.opera == "[object Opera]") {
+                          d.addEventListener("DOMContentLoaded", f, false);
+                      } else { f(); }
+                  })(document, window, "yandex_metrika_callbacks");
+               </script>
+               <noscript>
+                  <div><img src="//mc.yandex.ru/watch/27171494" style="position:absolute; left:-9999px;" alt="" /></div>
+               </noscript>
+               <!-- /Yandex.Metrika counter -->
+            </body>
+         </html>

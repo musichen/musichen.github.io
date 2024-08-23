@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Music hub default cover</title>
+  <desc id="desc">Fallback art for the main player when no matching song cover exists.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#121a33"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ff4d6d"/>
+      <stop offset="100%" stop-color="#6aa4ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" rx="120" fill="url(#bg)"/>
+  <circle cx="600" cy="600" r="320" fill="url(#ring)" opacity="0.96"/>
+  <circle cx="600" cy="600" r="180" fill="#08101f"/>
+  <circle cx="600" cy="600" r="48" fill="#f8fafc"/>
+  <text x="600" y="955" fill="#f8fafc" font-size="84" font-family="Arial, sans-serif" text-anchor="middle">Music Hub</text>
+</svg>

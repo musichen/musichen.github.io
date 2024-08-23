@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Watch Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        :root {
+            --btn-size: 3.5rem;
+        }
+        body {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .calculator {
+            width: 100vw;
+            height: 100vh;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .btn {
+            width: var(--btn-size);
+            height: var(--btn-size);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.1s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .display {
+            height: 4rem;
+            font-size: 2rem;
+            text-align: right;
+            padding: 0 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        @media (orientation: landscape) {
+            :root {
+                --btn-size: 2.8rem;
+            }
+            .display {
+                height: 3rem;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex justify-center items-center">
+    <div class="calculator p-2">
+        <div class="display bg-gray-800 rounded-lg mb-2 flex items-center justify-end">
+            <span id="result">0</span>
+        </div>
+        
+        <div class="grid grid-cols-4 gap-2">
+            <!-- Row 1 -->
+            <div class="btn bg-red-500 col-span-2" onclick="clearAll()">AC</div>
+            <div class="btn bg-purple-500" onclick="backspace()">
+                <i data-feather="delete"></i>
+            </div>
+            <div class="btn bg-yellow-500" onclick="appendOperator('/')">/</div>
+            
+            <!-- Row 2 -->
+            <div class="btn bg-blue-400" onclick="appendNumber('7')">7</div>
+            <div class="btn bg-green-400" onclick="appendNumber('8')">8</div>
+            <div class="btn bg-indigo-400" onclick="appendNumber('9')">9</div>
+            <div class="btn bg-yellow-500" onclick="appendOperator('*')">×</div>
+            
+            <!-- Row 3 -->
+            <div class="btn bg-blue-400" onclick="appendNumber('4')">4</div>
+            <div class="btn bg-green-400" onclick="appendNumber('5')">5</div>
+            <div class="btn bg-indigo-400" onclick="appendNumber('6')">6</div>
+            <div class="btn bg-yellow-500" onclick="appendOperator('-')">-</div>
+            
+            <!-- Row 4 -->
+            <div class="btn bg-blue-400" onclick="appendNumber('1')">1</div>
+            <div class="btn bg-green-400" onclick="appendNumber('2')">2</div>
+            <div class="btn bg-indigo-400" onclick="appendNumber('3')">3</div>
+            <div class="btn bg-yellow-500" onclick="appendOperator('+')">+</div>
+            
+            <!-- Row 5 -->
+            <div class="btn bg-blue-400" onclick="appendNumber('0')">0</div>
+            <div class="btn bg-blue-400" onclick="appendNumber('.')">.</div>
+            <div class="btn bg-pink-500 col-span-2" onclick="calculate()">=</div>
+        </div>
+    </div>
+
+    <script>
+        feather.replace();
+        
+        let currentInput = '0';
+        let previousInput = '';
+        let operation = null;
+        let resetInput = false;
+        
+        const resultElement = document.getElementById('result');
+        
+        function updateDisplay() {
+            resultElement.textContent = currentInput;
+        }
+        
+        function appendNumber(number) {
+            if (currentInput === '0' || resetInput) {
+                currentInput = number;
+                resetInput = false;
+            } else {
+                currentInput += number;
+            }
+            updateDisplay();
+        }
+        
+        function appendOperator(op) {
+            if (operation !== null) calculate();
+            previousInput = currentInput;
+            operation = op;
+            resetInput = true;
+        }
+        
+        function calculate() {
+            let computation;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+            
+            if (isNaN(prev) || isNaN(current)) return;
+            
+            switch (operation) {
+                case '+':
+                    computation = prev + current;
+                    break;
+                case '-':
+                    computation = prev - current;
+                    break;
+                case '*':
+                    computation = prev * current;
+                    break;
+                case '/':
+                    computation = prev / current;
+                    break;
+                default:
+                    return;
+            }
+            
+            currentInput = computation.toString();
+            operation = null;
+            resetInput = true;
+            updateDisplay();
+        }
+        
+        function clearAll() {
+            currentInput = '0';
+            previousInput = '';
+            operation = null;
+            updateDisplay();
+        }
+        
+        function backspace() {
+            if (currentInput.length === 1) {
+                currentInput = '0';
+            } else {
+                currentInput = currentInput.slice(0, -1);
+            }
+            updateDisplay();
+        }
+        
+        // Touch event handlers for better touch feedback
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('touchstart', function() {
+                this.classList.add('opacity-75');
+            });
+            
+            button.addEventListener('touchend', function() {
+                this.classList.remove('opacity-75');
+            });
+        });
+    </script>
+</body>
+</html>
